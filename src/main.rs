@@ -4,19 +4,16 @@ use model::*;
 use shuteye::sleep;
 use std::time::{Duration, Instant};
 
-use crate::{
-    hotkey::{click, WASTE_MANA_HOTKEY},
-    screen::*,
-};
+use crate::screen::*;
 mod hotkey;
 mod model;
 mod screen;
 
 fn should_continue(image: &Image) -> bool {
-    if !has_color_at_position(image, ICON_SELECTED, ICON_SELECTED_COLOR) {
+    if !has_color_at_position(image, ICON_SELECTED, ICON_SELECTED_COLOR, false) {
         println!("Tibia not selected");
         return false;
-    } else if has_color_at_position(image, LOGIN_SCREEN, LOGIN_SCREEN_COLOR) {
+    } else if has_color_at_position(image, LOGIN_SCREEN, LOGIN_SCREEN_COLOR, false) {
         println!("At login screen");
         return false;
     }
@@ -36,11 +33,11 @@ fn get_life(image: &Image) -> u8 {
 }
 
 fn get_mana(image: &Image) -> u8 {
-    if has_color_at_position(image, HIGH_MANA_POS, MANA_COLOR) {
+    if has_color_at_position(image, HIGH_MANA_POS, MANA_COLOR, true) {
         return 3;
-    } else if has_color_at_position(image, MID_MANA_POS, MANA_COLOR) {
+    } else if has_color_at_position(image, MID_MANA_POS, MANA_COLOR, true) {
         return 2;
-    } else if has_color_at_position(image, LOW_MANA_POS, MANA_COLOR) {
+    } else if has_color_at_position(image, LOW_MANA_POS, MANA_COLOR, true) {
         return 1;
     } else {
         return 0;
@@ -65,7 +62,6 @@ fn main() {
         food_timer: 2,
     };
     loop {
-        click(WASTE_MANA_HOTKEY);
         let now = Instant::now();
 
         let result = capturer.capture_store_frame();

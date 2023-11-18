@@ -5,7 +5,7 @@ use enigo::*;
 pub const FOOD_TIMER: i64 = 100;
 
 //HOTKEYS
-// pub const MANA_POT_HOTKEY: Key = Key::Layout('c');
+pub const MANA_POT_HOTKEY: Key = Key::Layout('c');
 pub const WASTE_MANA_HOTKEY: Key = Key::F1;
 // pub const HEAL_HOTKEY: Key = Key::Layout('9');
 // pub const HIGH_HEAL_HOTKEY: Key = Key::Layout('8');
@@ -19,8 +19,8 @@ pub fn use_hotkeys(status: &Status) {
 pub fn use_items_hotkeys(status: &Status) {
     if status.life == 0 {
         //enigo.key_click(LIFE_POT_HOTKEY)
-    } else if status.mana <= 2 {
-        //enigo = click(enigo, MANA_POT_HOTKEY)
+    } else if status.mana < 2 {
+        click(MANA_POT_HOTKEY)
     } else if status.food_timer == 0 {
         //enigo = click(enigo, FOOD_HOTKEY)
     } else if status.life == 2 {

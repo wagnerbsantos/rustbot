@@ -27,10 +27,6 @@ class Status:
     looted = False
 
 
-def image_reader(args):
-    while not args["stop"]:
-        pyautogui.press("[")
-        time.sleep(1)
 
 
 def cropper(image):
@@ -102,32 +98,39 @@ def isInRange(average, ran):
 
 
 def getIsAttacking(image):
-    if image[IS_ATTACKING_NEAREST_POS][RED] > IS_ATTACKING_RED:
+    if image[IS_ATTACKING_NEAREST_POS1][RED] > IS_ATTACKING_RED:
+        return True
+    if image[IS_ATTACKING_NEAREST_POS2][RED] > IS_ATTACKING_RED:
+        return True
+    if image[IS_ATTACKING_NEAREST_POS3][RED] > IS_ATTACKING_RED:
+        return True
+    if image[IS_ATTACKING_NEAREST_POS4][RED] > IS_ATTACKING_RED:
         return True
     return False
 
 
 def getLifeValue(image):
-    if image[HIGH_LIFE_POS][GREEN] > HAS_LIFE_GREEN:
+    if image[HIGH_LIFE_POS][GREEN] == HAS_LIFE_GREEN:
         return 3
-    elif image[MID_LIFE_POS][GREEN] > HAS_LIFE_GREEN:
+    elif image[MID_LIFE_POS][GREEN] == HAS_LIFE_GREEN:
         return 2
-    elif image[LOW_LIFE_POS][GREEN] > HAS_LIFE_GREEN:
+    elif image[LOW_LIFE_POS][GREEN] == HAS_LIFE_GREEN:
         return 1
     return 0
 
 
 def getManaValue(image):
-    if image[HIGH_MANA_POS][BLUE] > HAS_MANA_BLUE:
+    if image[HIGH_MANA_POS][BLUE] == HAS_MANA_BLUE:
         return 3
-    elif image[MID_MANA_POS][BLUE] > HAS_MANA_BLUE:
+    elif image[MID_MANA_POS][BLUE] == HAS_MANA_BLUE:
         return 2
-    elif image[LOW_MANA_POS][BLUE] > HAS_MANA_BLUE:
+    elif image[LOW_MANA_POS][BLUE] == HAS_MANA_BLUE:
         return 1
     return 0
 
 
 def getHasEnemy(image):
+    print(tuple(image[FIRST_ENEMY_POS][0:3]))
     if tuple(image[FIRST_ENEMY_POS][0:3]) == ENEMY_EXIST_RGB:
         return True
     return False
@@ -148,16 +151,19 @@ def getStatus(status: Status, image):
     status.mana_value = getManaValue(image)
     status.has_enemy = getHasEnemy(image)
     status.is_following = getIsFollowing(image)
+    status.move_time += 1
+    status.food_time += 1
 
 
 def loot():
     pyautogui.keyDown("shift")
     for square in LOOT_SQUARES:
-        x = square[0] + WINDOW_OFFSET[1]
-        y = square[1] + WINDOW_OFFSET[0]
+        x = square[0] 
+        y = square[1]
         pyautogui.rightClick(x, y)
+        time.sleep(0.0 1)
     pyautogui.keyUp("shift")
-    pyautogui.moveTo(tuple(reversed(WINDOW_OFFSET + STANDBY_MOUSE)))
+    pyautogui.moveTo(tuple(reversed(STANDBY_MOUSE)))
 
 
 def decision(status: Status, walkables: list):
@@ -166,12 +172,13 @@ def decision(status: Status, walkables: list):
         loot()
         status.stopped_attacking = False
     if status.life_value < 3 or status.mana_value == 3:
-        pyautogui.press(HEAL_HOTKEY)
-    if status.food_time % 240 == 0:
+       pyautogui.press(HEAL_HOTKEY)
+    if status.food_time % 50 == 0:
         pyautogui.press(FOOD_HOTKEY)
     if status.has_enemy and not status.is_attacking:
-        pyautogui.click(tuple(reversed(WINDOW_OFFSET + FIRST_ENEMY_POS)))
-        pyautogui.moveTo(tuple(reversed(WINDOW_OFFSET + STANDBY_MOUSE)))
+        print("attack")
+        pyautogui.click(tuple(reversed(FIRST_ENEMY_POS)))
+        pyautogui.moveTo(tuple(reversed(STANDBY_MOUSE)))
     if (
         status.move_time % MOVE_DEFAULT_COOLDOWN == 0
         and not status.is_attacking
@@ -187,8 +194,8 @@ def move(walkables):
     if len(walkables) < 2:
         return
     numero = random.randint(0, len(walkables) - 1)
-    pyautogui.click(tuple(reversed(WINDOW_OFFSET + walkables[numero])))
-    pyautogui.moveTo(tuple(reversed(WINDOW_OFFSET + STANDBY_MOUSE)), duration=0.1)
+    pyautogui.click(tuple(reversed(walkables[numero])))
+    pyautogui.moveTo(tuple(reversed(STANDBY_MOUSE)), duration=0.1)
 
 
 def findWalkable(image):
@@ -212,46 +219,20 @@ def clearFiles():
 
 def main():
     status = Status()
-    t_info = {"stop": False}
-    thread = threading.Thread(target=image_reader, args=(t_info,))
-    thread.start()
-    os.chdir("C:\\Users\\T-GAMER\\AppData\\Local\\Tibia\\packages\\Tibia\\screenshots")
-    clearFiles()
-    try:
-        while True:
-            files = os.listdir()
-            if len(files) > 0:
-                status.move_time = status.move_time + 1
-                status.food_time = status.food_time + 1
-                print(files)
-                file = files[0]
-
-                try:
-                    pyautogui.moveTo(tuple(reversed(STANDBY_MOUSE)))
-                    im = np.array(Image.open(file))
-                    getStatus(status, im)
-                    walkables = findWalkable(im)
-                    if status.is_attacking:
-                        status.move_time = -2
-                    decision(status, walkables)
-                    # cropper(im)
-                    time.sleep(0.1)
-                    os.remove(file)
-                except Exception as e:
-                    traceback.print_exc()
-                    print("faiou")
-            time.sleep(0.3)
-            if status.looted:
-                status.looted = False
-            if keyboard.is_pressed(["]"]):
-                break
-        t_info["stop"] = True
-        thread.join()
-    except Exception as e:
-        traceback.print_exc()
-        t_info["stop"] = True
-        thread.join()
+    while True:
+        im = np.array(pyautogui.screenshot())
+        getStatus(status, im)
+        print(status.move_time)
+        walkables = findWalkable(im)
+        if status.is_attacking:
+            status.move_time = -2
+        decision(status, walkables)
+        #pyautogui.moveTo(tuple(reversed(STANDBY_MOUSE)))
+        # cropper(im)
+        time.sleep(3)
+        if status.looted:
+            status.looted = False
 
 
 if __name__ == "__main__":
-    main()
+    main()                          
