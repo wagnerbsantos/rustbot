@@ -6,6 +6,7 @@ import time
 import keyboard
 import random
 import traceback
+import cv2
 from PIL import Image
 from consts import *
 
@@ -13,7 +14,9 @@ ranges = []
 # food = 0
 random.seed()
 pyautogui.PAUSE = 0.01
-
+dst = None
+#winname = 'window'
+#cv2.namedWindow(winname)
 
 class Status:
     is_attacking = False
@@ -21,29 +24,20 @@ class Status:
     mana_value = 3
     has_enemy = False
     is_following = False
-    move_time = -2
     food_time = -2
     stopped_attacking = False
     looted = False
+    isMoving = False
+    attack_cooldown = 0
+    item_cooldown = 0
+    heal_cooldown = 0
+    move_cooldown = 0
 
 
 
 
 def cropper(image):
-    average = [[0] * (FIELD_HEIGHT) for i in range(FIELD_WIDTH)]
-    for w in range(FIELD_WIDTH):
-        for h in range(FIELD_HEIGHT):
-            cropped = image[
-                TOP_LEFT_FIELD[1]
-                + h * SQUARE_SIZE : TOP_LEFT_FIELD[1]
-                + (h + 1) * SQUARE_SIZE,
-                TOP_LEFT_FIELD[0]
-                + w * SQUARE_SIZE : TOP_LEFT_FIELD[0]
-                + (w + 1) * SQUARE_SIZE,
-            ]
-            average[w][h] = averager(cropped)
-    ranger(average)
-    print(ranges)
+    return image[ MAP_TOP_LEFT[1]: MAP_HEIGHT + MAP_TOP_LEFT[1] , MAP_TOP_LEFT[0]: MAP_WIDTH + MAP_TOP_LEFT[0],]
 
 
 def averager(cropped):
@@ -130,7 +124,6 @@ def getManaValue(image):
 
 
 def getHasEnemy(image):
-    print(tuple(image[FIRST_ENEMY_POS][0:3]))
     if tuple(image[FIRST_ENEMY_POS][0:3]) == ENEMY_EXIST_RGB:
         return True
     return False
@@ -151,8 +144,11 @@ def getStatus(status: Status, image):
     status.mana_value = getManaValue(image)
     status.has_enemy = getHasEnemy(image)
     status.is_following = getIsFollowing(image)
-    status.move_time += 1
     status.food_time += 1
+    status.attack_cooldown -= 0.2
+    status.heal_cooldown -= 0.2
+    status.item_cooldown -= 0.2
+    status.move_cooldown -= 0.2
 
 
 def loot():
@@ -161,7 +157,10 @@ def loot():
         x = square[0] 
         y = square[1]
         pyautogui.rightClick(x, y)
-        time.sleep(0.0 1)
+    for square in reversed(LOOT_SQUARES):
+        x = square[0] 
+        y = square[1]
+        pyautogui.rightClick(x, y)
     pyautogui.keyUp("shift")
     pyautogui.moveTo(tuple(reversed(STANDBY_MOUSE)))
 
@@ -171,26 +170,42 @@ def decision(status: Status, walkables: list):
         status.looted = True
         loot()
         status.stopped_attacking = False
-    if status.life_value < 3 or status.mana_value == 3:
+    if status.life_value < 3  and status.heal_cooldown < 0:
        pyautogui.press(HEAL_HOTKEY)
-    if status.food_time % 50 == 0:
+       status.heal_cooldown = 1.2
+    elif status.mana_value == 3 and status.attack_cooldown < 0:
+        pyautogui.press(MANA_WASTE)
+        status.attack_cooldown = 3
+    elif ALLOW_WASTE and status.attack_cooldown < 0:
+        pyautogui.press(MANA_WASTE)
+        status.attack_cooldown = 3
+    if (status.mana_value == 0) and status.item_cooldown < 0:
+        pyautogui.press(MANA_POTION_WASTE)
+        status.item_cooldown = 3
+    if status.food_time % 80*5*30 == 0:
+        time.sleep(1)
         pyautogui.press(FOOD_HOTKEY)
+        time.sleep(1)
+        pyautogui.press(EXTRA_FOOD)
+        status.food_time = 1 
     if status.has_enemy and not status.is_attacking:
-        print("attack")
         pyautogui.click(tuple(reversed(FIRST_ENEMY_POS)))
         pyautogui.moveTo(tuple(reversed(STANDBY_MOUSE)))
     if (
-        status.move_time % MOVE_DEFAULT_COOLDOWN == 0
+        not status.isMoving
         and not status.is_attacking
         and not status.has_enemy
+        and status.move_cooldown< 0
     ):
         move(walkables)
+        status.move_cooldown = 2
     if status.is_attacking and not status.is_following:
-        pyautogui.click(tuple(reversed(WINDOW_OFFSET + FOLLOW_BUTTON)))
-        pyautogui.moveTo(tuple(reversed(WINDOW_OFFSET + STANDBY_MOUSE)))
+        pyautogui.click(tuple(reversed(FOLLOW_BUTTON)))
+        pyautogui.moveTo(tuple(reversed(STANDBY_MOUSE)))
 
 
 def move(walkables):
+    print(walkables)
     if len(walkables) < 2:
         return
     numero = random.randint(0, len(walkables) - 1)
@@ -202,12 +217,15 @@ def findWalkable(image):
     listao = []
     basew = MAP_TOP_LEFT[0]
     baseh = MAP_TOP_LEFT[1]
+    se = set()
     for h in range(5, MAP_HEIGHT, 5):
         for w in range(5, MAP_WIDTH, 5):
             if h < 45 and h > 25 and w < 45 and w > 25:
                 continue
-            if tuple(image[baseh + h][basew + w][0:3]) == MAP_WALKABLE_RGB:
+            se.add(tuple(image[baseh + h][basew + w][0:3]))
+            if tuple(image[baseh + h][basew + w][0:3]) in MAP_WALKABLE_RGB:
                 listao.append((baseh + h, basew + w))
+    #print(se)
     return listao
 
 
@@ -216,20 +234,29 @@ def clearFiles():
     for file in files:
         os.remove(file)
 
+def isMoving(minimap, dst):
+    mask = cv2.threshold(minimap, 150, 255, cv2.THRESH_BINARY)[1][:, :, 0]
+    if dst is None:
+        dst = mask.copy().astype(float)
+    mask = mask.copy().astype(float)
+    weighted = cv2.accumulateWeighted(mask, dst, 0.5)
+    btnot = cv2.absdiff(weighted, mask)
+    white = np.sum(btnot[btnot>0.01])
+    return dst, white > 10
+
 
 def main():
     status = Status()
+    dst = None
     while True:
         im = np.array(pyautogui.screenshot())
+        minimap = cropper(im)
+        dst, status.isMoving = isMoving(minimap, dst)
         getStatus(status, im)
-        print(status.move_time)
+        print(status.isMoving, status.is_attacking, status.has_enemy, status.move_cooldown)
         walkables = findWalkable(im)
-        if status.is_attacking:
-            status.move_time = -2
         decision(status, walkables)
-        #pyautogui.moveTo(tuple(reversed(STANDBY_MOUSE)))
-        # cropper(im)
-        time.sleep(3)
+        time.sleep(0.2)
         if status.looted:
             status.looted = False
 
