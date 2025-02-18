@@ -9,20 +9,15 @@ pub const LIFE_COLOR: &Color = &Color { r: 0, g: 50, b: 0 };
 pub const HIGH_MANA_POS: &Coord = &Coord { x: 1100, y: 48 };
 pub const MID_MANA_POS: &Coord = &Coord { x: 1330, y: 48 };
 pub const LOW_MANA_POS: &Coord = &Coord { x: 1450, y: 48 };
-pub const MANA_COLOR: &Color = &Color {
-    r: 0,
-    g: 41,
-    b: 91,
-};
+pub const MANA_COLOR: &Color = &Color { r: 0, g: 41, b: 91 };
 
 //MAP
 pub const MAP_AREA: &Area = &Area {
-    top_left: Coord {x: 1753, y: 38},
-    bot_right: Coord {x: 1857, y: 144},
+    top_left: Coord { x: 1753, y: 38 },
+    bot_right: Coord { x: 1857, y: 144 },
 };
 
 // MAP_Waypoints
-
 
 // OUTSIDE UI
 pub const ICON_SELECTED: &Coord = &Coord { x: 222, y: 1070 };
@@ -51,10 +46,6 @@ pub const WAITING_EMAIL_COLOR: &Color = &Color {
     b: 144,
 };
 
-
-
-
-
 pub const LOGIN_BUTTON: &Coord = &Coord { x: 1010, y: 597 };
 pub const BRAVE_BUTTON: &Coord = &Coord { x: 114, y: 1062 };
 pub const EMAIL_LINK: &Coord = &Coord { x: 736, y: 91 };
@@ -65,41 +56,44 @@ pub const DELETE_EMAIL: &Coord = &Coord { x: 424, y: 201 };
 pub const SEND_CODE: &Coord = &Coord { x: 1051, y: 580 };
 pub const CHAR_SELECT: &Coord = &Coord { x: 1235, y: 718 };
 
-
 pub fn get_vec_position(bounds: &Coord, position: &Coord) -> Result<usize, &'static str> {
     if position.x > bounds.x || position.y > bounds.y {
         return Err("Wrong size");
     }
-    return Ok((position.y * bounds.x + position.x) as usize);
+    Ok((position.y * bounds.x + position.x) as usize)
 }
 
 pub fn get_color_at_position(image: &Image, position: &Coord, isprint: bool) -> Color {
-    
     let color = image.pixels[get_vec_position(image.bounds, position).unwrap()];
-    if isprint{
+    if isprint {
         println!("{} {} {}", color.r, color.g, color.b)
     }
 
-    return Color {
+    Color {
         r: color.r,
         g: color.g,
         b: color.b,
-    };
+    }
 }
 
 pub fn color_greater_than(first: &Color, second: &Color) -> bool {
     let r = first.r >= second.r;
     let g = first.g >= second.g;
     let b = first.b >= second.b;
-    return r && g && b;
+    r && g && b
 }
 
 pub fn has_greater_color_at_position(image: &Image, position: &Coord, color: &Color) -> bool {
-    return color_greater_than(&get_color_at_position(image, position, false), color);
+    color_greater_than(&get_color_at_position(image, position, false), color)
 }
 
-pub fn has_color_at_position(image: &Image, position: &Coord, color: &Color, isprint: bool) -> bool {
-    return &get_color_at_position(image, position, isprint) == color;
+pub fn has_color_at_position(
+    image: &Image,
+    position: &Coord,
+    color: &Color,
+    isprint: bool,
+) -> bool {
+    &get_color_at_position(image, position, isprint) == color
 }
 
 pub fn get_color_positions_in_area(image: &Image, area: &Area, color: &Color) -> Vec<Coord> {
@@ -112,12 +106,12 @@ pub fn get_color_positions_in_area(image: &Image, area: &Area, color: &Color) ->
             }
         }
     }
-    return result
+    result
 }
 
 pub fn new_coord(ponto: &(u32, u32)) -> Coord {
-    return Coord {
+    Coord {
         x: ponto.0,
         y: ponto.1,
-    };
+    }
 }

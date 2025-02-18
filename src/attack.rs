@@ -55,7 +55,7 @@ impl LootCoords {
 pub fn use_attack(image: &Image, status: &mut Status) -> i32 {
     check_weapon(image);
     let enemy_count = count_enemies(image);
-    if (enemy_count > 0) {
+    if enemy_count > 0 {
         let target = get_attacker(image, enemy_count);
         if status.is_attacking && target.is_none() {
             loot();
@@ -71,13 +71,13 @@ pub fn use_attack(image: &Image, status: &mut Status) -> i32 {
             loot();
         }
     }
-    return enemy_count;
+    enemy_count
 }
 
 fn check_weapon(image: &Image) {
     let has_no_weapon =
         has_color_at_position(image, &EMPTY_WEAPON_POSITION, &EMPTY_WEAPON_COLOR, false);
-    if (has_no_weapon) {
+    if has_no_weapon {
         click(EQUIP_SWORD_HOTKEY);
     }
 }
@@ -100,7 +100,7 @@ pub fn quick_loot(coord: &Coord, enigo: &mut Enigo) {
 }
 
 pub fn set_follow(image: &Image) {
-    if (has_color_at_position(image, &FOLLOW_BUTTON, &FOLLOW_BUTTON_COLOR_DISABLED, false)) {
+    if has_color_at_position(image, &FOLLOW_BUTTON, &FOLLOW_BUTTON_COLOR_DISABLED, false) {
         move_to(&FOLLOW_BUTTON);
     }
 }
@@ -121,7 +121,7 @@ pub fn use_target(target: Option<i32>) {
 pub fn count_enemies(image: &Image) -> i32 {
     let mut count = 0;
     for i in 0..10 {
-        if (has_color_at_position(
+        if has_color_at_position(
             image,
             &Coord {
                 x: ENEMY_1_POS.x,
@@ -129,11 +129,11 @@ pub fn count_enemies(image: &Image) -> i32 {
             },
             &ENEMY_BAR_COLOR,
             false,
-        )) {
+        ) {
             count += 1;
         }
     }
-    return count;
+    count
 }
 
 pub fn get_attacker(image: &Image, enemy_count: i32) -> Option<i32> {
@@ -154,5 +154,5 @@ pub fn get_attacker(image: &Image, enemy_count: i32) -> Option<i32> {
     if found == -1 {
         return None;
     }
-    return Some(found);
+    Some(found)
 }

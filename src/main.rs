@@ -28,60 +28,61 @@ fn should_continue(image: &Image) -> u8 {
         }
         return 2;
     }
-    return 0;
+    0
 }
 
 fn get_life(image: &Image) -> u8 {
     if has_greater_color_at_position(image, HIGH_LIFE_POS, LIFE_COLOR) {
-        return 3;
+        3
     } else if has_greater_color_at_position(image, MID_LIFE_POS, LIFE_COLOR) {
-        return 2;
+        2
     } else if has_greater_color_at_position(image, LOW_LIFE_POS, LIFE_COLOR) {
-        return 1;
+        1
     } else {
-        return 0;
+        0
     }
 }
 
 fn get_mana(image: &Image) -> u8 {
     if has_color_at_position(image, HIGH_MANA_POS, MANA_COLOR, false) {
-        return 3;
+        3
     } else if has_color_at_position(image, MID_MANA_POS, MANA_COLOR, false) {
-        return 2;
+        2
     } else if has_color_at_position(image, LOW_MANA_POS, MANA_COLOR, false) {
-        return 1;
+        1
     } else {
-        return 0;
+        0
     }
 }
 
 fn use_image(image: &Image, mut status: Status) -> Status {
     status.food_timer = status.food_timer - 1;
     status.ladder_cooldown = status.ladder_cooldown - 1;
-    if (!status.is_attacking) {
+    if !status.is_attacking {
         status.move_timer = status.move_timer - 1;
     }
     status.life = get_life(image);
     status.mana = get_mana(image);
     status.has_cap = get_has_cap(image);
 
-    return status;
+    status
 }
 
 fn get_has_cap(image: &Image) -> bool {
-    let cap_pos_1 = Coord { x: 1848, y: 285 };
+    let mut cap_pos_1 = Coord { x: 1847, y: 285 };
     let cap_color = Color {
         r: 50,
         b: 30,
         g: 30,
     };
     let mut result = false;
-    for i in 0..6 {
+    for _ in 0..6 {
+        cap_pos_1.x = cap_pos_1.x + 1;
         if has_greater_color_at_position(image, &cap_pos_1, &cap_color) {
             result = true;
         }
     }
-    return result;
+    result
 }
 
 fn run_gameloop() {
