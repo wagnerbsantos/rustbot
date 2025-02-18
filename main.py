@@ -28,10 +28,13 @@ class Status:
     stopped_attacking = False
     looted = False
     isMoving = False
-    attack_cooldown = 0
+    attack_cooldown = True
     item_cooldown = 0
     heal_cooldown = 0
     move_cooldown = 0
+    ring_equiped = False
+    weapon_equiped = True
+    weapon_2_equiped = False
 
 
 
@@ -102,25 +105,33 @@ def getIsAttacking(image):
         return True
     return False
 
+def getIsAttackingCooldown(image):
+    return image[ATTACK_COOLDOWN_POS][RED] == ATTACK_COOLDOWN_COLOR_RED
+
 
 def getLifeValue(image):
-    if image[HIGH_LIFE_POS][GREEN] == HAS_LIFE_GREEN:
+    if image[HIGH_LIFE_POS][GREEN] >= HAS_LIFE_GREEN:
         return 3
-    elif image[MID_LIFE_POS][GREEN] == HAS_LIFE_GREEN:
+    elif image[MID_LIFE_POS][GREEN] >= HAS_LIFE_GREEN:
         return 2
-    elif image[LOW_LIFE_POS][GREEN] == HAS_LIFE_GREEN:
+    elif image[LOW_LIFE_POS][GREEN] >= HAS_LIFE_GREEN:
         return 1
     return 0
 
 
 def getManaValue(image):
-    if image[HIGH_MANA_POS][BLUE] == HAS_MANA_BLUE:
+    if image[HIGH_MANA_POS][BLUE] >= HAS_MANA_BLUE:
         return 3
-    elif image[MID_MANA_POS][BLUE] == HAS_MANA_BLUE:
+    elif image[MID_MANA_POS][BLUE] >= HAS_MANA_BLUE:
         return 2
-    elif image[LOW_MANA_POS][BLUE] == HAS_MANA_BLUE:
+    elif image[LOW_MANA_POS][BLUE] >= HAS_MANA_BLUE:
         return 1
     return 0
+
+def getRingEquiped(image):
+    if tuple(image[RING_POS])!= RING_COLOR:
+        return True
+    return False
 
 
 def getHasEnemy(image):
@@ -144,11 +155,18 @@ def getStatus(status: Status, image):
     status.mana_value = getManaValue(image)
     status.has_enemy = getHasEnemy(image)
     status.is_following = getIsFollowing(image)
+    status.ring_equiped = getRingEquiped(image)
     status.food_time += 1
-    status.attack_cooldown -= 0.2
+    status.attack_cooldown = getIsAttackingCooldown(image)
     status.heal_cooldown -= 0.2
     status.item_cooldown -= 0.2
     status.move_cooldown -= 0.2
+    status.weapon_equiped = not getIsWeaponUnequiped(image)
+    status.weapon_2_equiped = getIsWeapon2Equiped(image)
+
+def getIsWeapon2Equiped(image):
+    print(image[WEAPON_2_EQUIPED_POS])
+    return tuple(image[WEAPON_2_EQUIPED_POS]) == WEAPON_EQUIPED_COLOR
 
 
 def loot():
@@ -167,21 +185,45 @@ def loot():
 
 def decision(status: Status, walkables: list):
     if status.stopped_attacking:
+        time.sleep(0.5)
         status.looted = True
         loot()
         status.stopped_attacking = False
+        time.sleep(0.5)
+
     if status.life_value < 3  and status.heal_cooldown < 0:
        pyautogui.press(HEAL_HOTKEY)
        status.heal_cooldown = 1.2
-    elif status.mana_value == 3 and status.attack_cooldown < 0:
+
+    # if status.mana_value >= 2 and not status.attack_cooldown and status.is_attacking:
+    #     pyautogui.press(MANA_ATTACK)
+
+    if status.mana_value == 3 and not status.attack_cooldown:
         pyautogui.press(MANA_WASTE)
-        status.attack_cooldown = 3
-    elif ALLOW_WASTE and status.attack_cooldown < 0:
+    elif ALLOW_WASTE and not status.attack_cooldown:
         pyautogui.press(MANA_WASTE)
-        status.attack_cooldown = 3
-    if (status.mana_value == 0) and status.item_cooldown < 0:
+
+    # if (status.life_value <= 1) and status.item_cooldown < 0:
+    #     pyautogui.press(LIFE_HOTKEY)
+    #     status.item_cooldown = 3
+    elif (status.mana_value == 0):
         pyautogui.press(MANA_POTION_WASTE)
         status.item_cooldown = 3
+    # elif (status.mana_value <= 1) and (not status.ring_equiped) and status.item_cooldown < 0:
+    #     pyautogui.press(EQUIP_RING)
+    #     status.item_cooldown = 3
+    # elif (status.ring_equiped and (status.mana_value >= 3)) and status.item_cooldown < 0:
+    #     pyautogui.press(EQUIP_RING)
+    #     status.item_cooldown = 3
+
+    if (not status.weapon_equiped):
+        pyautogui.press(EQUIP_SWORD)
+        time.sleep(1)
+    if not status.weapon_2_equiped and status.food_time % 80*5*30 == 0:
+        time.sleep(2)
+        print('equip dist')
+        pyautogui.press(EQUIP_DISTANCE)
+
     if status.food_time % 80*5*30 == 0:
         time.sleep(1)
         pyautogui.press(FOOD_HOTKEY)
@@ -205,27 +247,26 @@ def decision(status: Status, walkables: list):
 
 
 def move(walkables):
-    print(walkables)
     if len(walkables) < 2:
         return
     numero = random.randint(0, len(walkables) - 1)
     pyautogui.click(tuple(reversed(walkables[numero])))
     pyautogui.moveTo(tuple(reversed(STANDBY_MOUSE)), duration=0.1)
 
+def getIsWeaponUnequiped(image):
+    return tuple(image[WEAPON_POS]) == UNEQUIPED_WEAPON_COLOR
+
 
 def findWalkable(image):
     listao = []
     basew = MAP_TOP_LEFT[0]
     baseh = MAP_TOP_LEFT[1]
-    se = set()
-    for h in range(5, MAP_HEIGHT, 5):
-        for w in range(5, MAP_WIDTH, 5):
-            if h < 45 and h > 25 and w < 45 and w > 25:
+    for h in range(1, MAP_HEIGHT, 1):
+        for w in range(1, MAP_WIDTH, 1):
+            if h < 60 and h > 40 and w < 60 and w > 40:
                 continue
-            se.add(tuple(image[baseh + h][basew + w][0:3]))
             if tuple(image[baseh + h][basew + w][0:3]) in MAP_WALKABLE_RGB:
                 listao.append((baseh + h, basew + w))
-    #print(se)
     return listao
 
 
@@ -253,7 +294,7 @@ def main():
         minimap = cropper(im)
         dst, status.isMoving = isMoving(minimap, dst)
         getStatus(status, im)
-        print(status.isMoving, status.is_attacking, status.has_enemy, status.move_cooldown)
+        print(status.mana_value, status.life_value, status.weapon_equiped)
         walkables = findWalkable(im)
         decision(status, walkables)
         time.sleep(0.2)
