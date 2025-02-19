@@ -48,11 +48,11 @@ fn get_life(image: &Image) -> u8 {
 }
 
 fn get_mana(image: &Image) -> u8 {
-	if has_color_at_position(image, HIGH_MANA_POS, MANA_COLOR, false) {
+	if has_greater_color_at_position(image, HIGH_MANA_POS, MANA_COLOR) {
 		3
-	} else if has_color_at_position(image, MID_MANA_POS, MANA_COLOR, false) {
+	} else if has_greater_color_at_position(image, MID_MANA_POS, MANA_COLOR ) {
 		2
-	} else if has_color_at_position(image, LOW_MANA_POS, MANA_COLOR, false) {
+	} else if has_greater_color_at_position(image, LOW_MANA_POS, MANA_COLOR) {
 		1
 	} else {
 		0
@@ -73,15 +73,15 @@ fn use_image(image: &Image, mut status: Status) -> Status {
 }
 
 fn get_has_cap(image: &Image) -> bool {
-	let mut cap_pos_1 = Coord { x: 1847, y: 285 };
+	let mut cap_pos_1 = Coord { x: 1841, y: 287 };
 	let cap_color = Color {
-		r: 50,
+		r: 20,
 		b: 30,
-		g: 30,
+		g: 51,
 	};
 	let mut result = false;
-	for _ in 0..6 {
-		cap_pos_1.x = cap_pos_1.x + 1;
+	for _ in 0..10 {
+		cap_pos_1.x = cap_pos_1.x - 1;
 		if has_greater_color_at_position(image, &cap_pos_1, &cap_color) {
 			result = true;
 		}
@@ -129,7 +129,7 @@ fn run_gameloop() {
 					0 => {
 						status = use_image(&image, status);
 						use_hotkeys(&status);
-						if !status.has_cap {
+						if (!status.has_cap && status.food_timer <=0) || status.life <= 1 {
 							playAudio();
 						}
 						if status.food_timer < 0 {
@@ -240,17 +240,17 @@ fn run_gameloop() {
 
 		let elapsed = now.elapsed();
 		println!("Elapsed: {:.2?}", elapsed);
-		if elapsed.as_millis() < 1000 {
-			sleep(Duration::from_millis(1000 - elapsed.as_millis() as u64));
+		if elapsed.as_millis() < 850 {
+			sleep(Duration::from_millis(850 - elapsed.as_millis() as u64));
 		} else {
-			sleep(Duration::from_millis(2000));
+			sleep(Duration::from_millis(1000));
 		}
 		//break;
 	}
 }
 
 fn playAudio() {
-	let (_, stream_handle) = rodio::OutputStream::try_default().unwrap();
+	let (stream, stream_handle) = rodio::OutputStream::try_default().unwrap();
 	let welcome = File::open("src/resources/Tristam.ogg").unwrap();
 	let source = rodio::Decoder::new(BufReader::new(welcome)).unwrap();
 	stream_handle.play_raw(source.convert_samples()).expect("TODO: panic message");

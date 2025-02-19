@@ -15,6 +15,7 @@ pub const HEAL_HOTKEY: Key = Key::F2;
 pub const LIFE_POT_HOTKEY: Key = Key::Layout('x');
 pub const FOOD_HOTKEY: Key = Key::Layout('b');
 pub const FOOD_HOTKEY_2: Key = Key::Layout('m');
+pub const EQUIP_RANGED_HOTKEY: Key = Key::Layout('2');
 
 pub fn use_hotkeys(status: &Status) {
     use_items_hotkeys(status);
@@ -30,13 +31,15 @@ pub fn use_items_hotkeys(status: &Status) {
     if status.food_timer == 0 {
         click(FOOD_HOTKEY);
         sleep(Duration::from_millis(100));
-        click(FOOD_HOTKEY_2)
+        click(FOOD_HOTKEY_2);
+        // sleep(Duration::from_millis(100));
+        // click(EQUIP_RANGED_HOTKEY);
     }
 
     // spells
     if status.life < 3 && status.life > 0 {
         click(HEAL_HOTKEY)
-    } else if status.mana == 3 {
+    } else if status.mana >= 3 && status.ladder_cooldown % 3 == 0{
         click(WASTE_MANA_HOTKEY);
     }
 }

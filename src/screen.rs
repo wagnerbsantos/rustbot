@@ -6,10 +6,10 @@ pub const LOW_LIFE_POS: &Coord = &Coord { x: 480, y: 48 };
 pub const LIFE_COLOR: &Color = &Color { r: 0, g: 50, b: 0 };
 
 // MANA
-pub const HIGH_MANA_POS: &Coord = &Coord { x: 1100, y: 48 };
-pub const MID_MANA_POS: &Coord = &Coord { x: 1330, y: 48 };
-pub const LOW_MANA_POS: &Coord = &Coord { x: 1450, y: 48 };
-pub const MANA_COLOR: &Color = &Color { r: 0, g: 41, b: 91 };
+pub const HIGH_MANA_POS: &Coord = &Coord { x: 1100, y: 40 };
+pub const MID_MANA_POS: &Coord = &Coord { x: 1330, y: 40 };
+pub const LOW_MANA_POS: &Coord = &Coord { x: 1450, y: 40 };
+pub const MANA_COLOR: &Color = &Color { r: 0, g: 0, b: 100 };
 
 //MAP
 pub const MAP_AREA: &Area = &Area {
@@ -20,7 +20,7 @@ pub const MAP_AREA: &Area = &Area {
 // MAP_Waypoints
 
 // OUTSIDE UI
-pub const ICON_SELECTED: &Coord = &Coord { x: 333, y: 1070 };
+pub const ICON_SELECTED: &Coord = &Coord { x: 222, y: 1070 };
 pub const ICON_SELECTED_COLOR: &Color = &Color {
 	r: 81,
 	g: 81,

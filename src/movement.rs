@@ -41,17 +41,17 @@ pub fn use_movement(image: &Image, status: &mut Status) {
 	println!("{}", sanitized_coords.len());
 	if sanitized_coords.len() > 0 {
 		let next = sanitized_coords.get(0).unwrap();
-
-		let under_checkpoint = next.x == MAP_CENTER.x && next.y == MAP_CENTER.y;
+		println!("{:?}", next);
+		let under_checkpoint = next.x == MAP_CENTER.x && ((next.y as i32 - MAP_CENTER.y as i32).abs() <=1);
 
 
 		if under_checkpoint && !status.is_attacking {
 			status.next_waypoint = (status.next_waypoint + 1) % (WAYPOINTS.len() - 1);
-			status.move_timer = 3;
+			status.move_timer = 2;
 			if status.ladder_cooldown <= 0 && under_checkpoint {
 				right_click(&Coord { x: 950, y: 480 });
 				status.ladder_cooldown = 3;
-				sleep(Duration::from_millis(400));
+				sleep(Duration::from_millis(150));
 			}
 			println!("under checkpoint");
 		}

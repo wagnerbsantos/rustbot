@@ -13,6 +13,8 @@ pub const ENEMY_BAR_COLOR: Color = Color { r: 0, g: 0, b: 0 };
 pub const ENEMY_ATTACK_COLOR: Color = Color { r: 255, g: 0, b: 0 };
 pub const FOLLOW_BUTTON: Coord = Coord { x: 1902, y: 182 };
 pub const EMPTY_WEAPON_POSITION: Coord = Coord { x: 1760, y: 227 };
+pub const NO_WEAPON_2_POSITION: Coord = Coord { x: 1535, y: 286 };
+pub const WEAPON_2_EQUIPED_POSITION: Coord = Coord { x: 1534, y: 285 };
 pub const EMPTY_WEAPON_COLOR: Color = Color {
     r: 118,
     g: 120,
@@ -28,6 +30,7 @@ pub const FOLLOW_BUTTON_COLOR_DISABLED: Color = Color {
 pub const LAST_ENEMY_HOTKEY: Key = Key::Layout('p');
 pub const NEXT_ENEMY_HOTKEY: Key = Key::Layout('e');
 pub const EQUIP_SWORD_HOTKEY: Key = Key::Layout('1');
+pub const EQUIP_SPEAR_HOTKEY: Key = Key::Layout('2');
 
 struct LootCoords;
 impl LootCoords {
@@ -63,7 +66,8 @@ pub fn use_attack(image: &Image, status: &mut Status) -> i32 {
         }
         use_target(target);
         set_follow(image);
-        status.is_attacking = true
+        status.is_attacking = true;
+        loot();
     } else {
         if status.is_attacking == true {
             status.is_attacking = false;
@@ -77,21 +81,30 @@ pub fn use_attack(image: &Image, status: &mut Status) -> i32 {
 fn check_weapon(image: &Image) {
     let has_no_weapon =
         has_color_at_position(image, &EMPTY_WEAPON_POSITION, &EMPTY_WEAPON_COLOR, false);
+    let has_no_ranged_weapon = 
+        has_color_at_position(image, &NO_WEAPON_2_POSITION, &Color {r: 68, g: 68, b: 69}, false);
+    let has_ranged_weapon_equiped = 
+        has_color_at_position(image, &WEAPON_2_EQUIPED_POSITION, &Color {r: 41, g: 41, b: 41}, false);
     if has_no_weapon {
-        click(EQUIP_SWORD_HOTKEY);
+            click(EQUIP_SWORD_HOTKEY);
+    } else {
+        if !has_ranged_weapon_equiped && !has_no_ranged_weapon {
+            click(EQUIP_SPEAR_HOTKEY)
+        }
     }
 }
 
 pub fn loot() {
-    let mut enigo = Enigo::new();
-    enigo.key_down(Key::Shift);
-    for loot in LootCoords::VALUES.iter() {
-        quick_loot(loot, &mut enigo);
-        sleep(Duration::from_millis(100));
-    }
-    enigo.key_up(Key::Shift);
-    sleep(Duration::from_millis(200));
-    enigo.mouse_move_to(1748, 150);
+    click(Key::F12)
+    // let mut enigo = Enigo::new();
+    // enigo.key_down(Key::Shift);
+    // for loot in LootCoords::VALUES.iter() {
+    //     quick_loot(loot, &mut enigo);
+    //     sleep(Duration::from_millis(100));
+    // }
+    // enigo.key_up(Key::Shift);
+    // sleep(Duration::from_millis(200));
+    // enigo.mouse_move_to(1748, 150);
 }
 
 pub fn quick_loot(coord: &Coord, enigo: &mut Enigo) {
@@ -108,7 +121,7 @@ pub fn set_follow(image: &Image) {
 pub fn use_target(target: Option<i32>) {
     match target {
         Some(t) => {
-            if t > 3 {
+            if t > 2 {
                 click(LAST_ENEMY_HOTKEY);
             }
         }
