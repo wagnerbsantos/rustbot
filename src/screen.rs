@@ -1,13 +1,13 @@
 use crate::model::{Area, Color, Coord, Image};
 // LIFE
 pub const HIGH_LIFE_POS: &Coord = &Coord { x: 860, y: 48 };
-pub const MID_LIFE_POS: &Coord = &Coord { x: 580, y: 48 };
+pub const MID_LIFE_POS: &Coord = &Coord { x: 680, y: 48 };
 pub const LOW_LIFE_POS: &Coord = &Coord { x: 480, y: 48 };
 pub const LIFE_COLOR: &Color = &Color { r: 0, g: 50, b: 0 };
 
 // MANA
-pub const HIGH_MANA_POS: &Coord = &Coord { x: 1100, y: 40 };
-pub const MID_MANA_POS: &Coord = &Coord { x: 1330, y: 40 };
+pub const HIGH_MANA_POS: &Coord = &Coord { x: 1050, y: 40 };
+pub const MID_MANA_POS: &Coord = &Coord { x: 1360, y: 40 };
 pub const LOW_MANA_POS: &Coord = &Coord { x: 1450, y: 40 };
 pub const MANA_COLOR: &Color = &Color { r: 0, g: 0, b: 100 };
 

@@ -34,4 +34,6 @@ pub struct Status {
     pub move_timer: i64,
     pub next_waypoint: usize,
     pub ladder_cooldown: i64,
+    pub has_full_mantra: bool,
+    pub is_monk: bool,
 }

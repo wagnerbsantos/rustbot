@@ -107,14 +107,9 @@ pub fn loot() {
     // enigo.mouse_move_to(1748, 150);
 }
 
-pub fn quick_loot(coord: &Coord, enigo: &mut Enigo) {
-    enigo.mouse_move_to(coord.x as i32, coord.y as i32);
-    enigo.mouse_click(MouseButton::Right);
-}
-
 pub fn set_follow(image: &Image) {
-    if has_color_at_position(image, &FOLLOW_BUTTON, &FOLLOW_BUTTON_COLOR_DISABLED, false) {
-        move_to(&FOLLOW_BUTTON);
+    if has_color_at_position(image, &FOLLOW_BUTTON, &FOLLOW_BUTTON_COLOR_DISABLED, false) { 
+        click(Key::Layout('\\'));
     }
 }
 

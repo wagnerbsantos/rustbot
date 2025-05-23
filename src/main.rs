@@ -68,8 +68,20 @@ fn use_image(image: &Image, mut status: Status) -> Status {
 	status.life = get_life(image);
 	status.mana = get_mana(image);
 	status.has_cap = get_has_cap(image);
+	status.has_full_mantra = get_has_full_mantra(image);
 
 	status
+}
+
+fn get_has_full_mantra(image: &Image) -> bool {
+	let mantra_pos = Coord { x: 1029, y: 77 };
+	let mantra_color = Color {
+		r: 219,
+		g: 154,
+		b: 70,
+	};
+	println!("Mantra {:?}", mantra_color);
+	return has_color_at_position(image, &mantra_pos, &mantra_color, true);
 }
 
 fn get_has_cap(image: &Image) -> bool {
@@ -104,6 +116,8 @@ fn run_gameloop() {
 		is_moving: false,
 		has_cap: true,
 		ladder_cooldown: 10,
+		has_full_mantra: false,
+		is_monk: true
 	};
 	loop {
 		let now = Instant::now();
@@ -147,91 +161,92 @@ fn run_gameloop() {
 							enigo.mouse_move_to(ICON_SELECTED.x.try_into().unwrap(), ICON_SELECTED.y.try_into().unwrap());
 							enigo.mouse_click(MouseButton::Left);
 						} else {
-							run_tibia();
+							//run_tibia();
 						}
 					}
 					2.. => {
-						//Use Password
-						let mut enigo = Enigo::new();
-						enigo.key_sequence("76509823tyu");
-						sleep(Duration::from_millis(2000));
+						break;
+					// 	//Use Password
+					// 	let mut enigo = Enigo::new();
+					// 	enigo.key_sequence("76509823tyu");
+					// 	sleep(Duration::from_millis(2000));
 
-						enigo.mouse_move_to(
-							LOGIN_BUTTON.x.try_into().unwrap(),
-							LOGIN_BUTTON.y.try_into().unwrap(),
-						);
-						enigo.mouse_click(MouseButton::Left);
-						enigo.mouse_move_to(
-							BRAVE_BUTTON.x.try_into().unwrap(),
-							BRAVE_BUTTON.y.try_into().unwrap(),
-						);
-						enigo.mouse_click(MouseButton::Left);
-						sleep(Duration::from_millis(5000));
-						enigo.mouse_move_to(
-							EMAIL_LINK.x.try_into().unwrap(),
-							EMAIL_LINK.y.try_into().unwrap(),
-						);
-						enigo.mouse_click(MouseButton::Left);
+					// 	enigo.mouse_move_to(
+					// 		LOGIN_BUTTON.x.try_into().unwrap(),
+					// 		LOGIN_BUTTON.y.try_into().unwrap(),
+					// 	);
+					// 	enigo.mouse_click(MouseButton::Left);
+					// 	enigo.mouse_move_to(
+					// 		BRAVE_BUTTON.x.try_into().unwrap(),
+					// 		BRAVE_BUTTON.y.try_into().unwrap(),
+					// 	);
+					// 	enigo.mouse_click(MouseButton::Left);
+					// 	sleep(Duration::from_millis(5000));
+					// 	enigo.mouse_move_to(
+					// 		EMAIL_LINK.x.try_into().unwrap(),
+					// 		EMAIL_LINK.y.try_into().unwrap(),
+					// 	);
+					// 	enigo.mouse_click(MouseButton::Left);
 
-						sleep(Duration::from_millis(6000));
-						enigo.mouse_move_to(
-							FIRST_EMAIL.x.try_into().unwrap(),
-							FIRST_EMAIL.y.try_into().unwrap(),
-						);
-						enigo.mouse_click(MouseButton::Left);
+					// 	sleep(Duration::from_millis(6000));
+					// 	enigo.mouse_move_to(
+					// 		FIRST_EMAIL.x.try_into().unwrap(),
+					// 		FIRST_EMAIL.y.try_into().unwrap(),
+					// 	);
+					// 	enigo.mouse_click(MouseButton::Left);
 
-						sleep(Duration::from_millis(3000));
-						enigo.mouse_move_to(
-							EMAIL_CODE.x.try_into().unwrap(),
-							EMAIL_CODE.y.try_into().unwrap(),
-						);
-						enigo.mouse_click(MouseButton::Left);
-						sleep(Duration::from_millis(100));
-						enigo.mouse_click(MouseButton::Left);
+					// 	sleep(Duration::from_millis(3000));
+					// 	enigo.mouse_move_to(
+					// 		EMAIL_CODE.x.try_into().unwrap(),
+					// 		EMAIL_CODE.y.try_into().unwrap(),
+					// 	);
+					// 	enigo.mouse_click(MouseButton::Left);
+					// 	sleep(Duration::from_millis(100));
+					// 	enigo.mouse_click(MouseButton::Left);
 
-						sleep(Duration::from_millis(1000));
-						enigo.key_down(Key::Control);
-						enigo.key_sequence("c");
-						enigo.key_up(Key::Control);
+					// 	sleep(Duration::from_millis(1000));
+					// 	enigo.key_down(Key::Control);
+					// 	enigo.key_sequence("c");
+					// 	enigo.key_up(Key::Control);
 
-						sleep(Duration::from_millis(2000));
-						enigo.mouse_move_to(
-							DELETE_EMAIL.x.try_into().unwrap(),
-							DELETE_EMAIL.y.try_into().unwrap(),
-						);
-						enigo.mouse_click(MouseButton::Left);
+					// 	sleep(Duration::from_millis(2000));
+					// 	enigo.mouse_move_to(
+					// 		DELETE_EMAIL.x.try_into().unwrap(),
+					// 		DELETE_EMAIL.y.try_into().unwrap(),
+					// 	);
+					// 	enigo.mouse_click(MouseButton::Left);
 
-						enigo.mouse_move_to(
-							ICON_SELECTED.x.try_into().unwrap(),
-							ICON_SELECTED.y.try_into().unwrap(),
-						);
-						enigo.mouse_click(MouseButton::Left);
+					// 	enigo.mouse_move_to(
+					// 		ICON_SELECTED.x.try_into().unwrap(),
+					// 		ICON_SELECTED.y.try_into().unwrap(),
+					// 	);
+					// 	enigo.mouse_click(MouseButton::Left);
 
-						sleep(Duration::from_millis(1000));
-						enigo.mouse_move_to(
-							CODE_BOX.x.try_into().unwrap(),
-							CODE_BOX.y.try_into().unwrap(),
-						);
-						enigo.mouse_click(MouseButton::Left);
-						enigo.key_down(Key::Control);
-						enigo.key_sequence("v");
-						enigo.key_up(Key::Control);
+					// 	sleep(Duration::from_millis(1000));
+					// 	enigo.mouse_move_to(
+					// 		CODE_BOX.x.try_into().unwrap(),
+					// 		CODE_BOX.y.try_into().unwrap(),
+					// 	);
+					// 	enigo.mouse_click(MouseButton::Left);
+					// 	enigo.key_down(Key::Control);
+					// 	enigo.key_sequence("v");
+					// 	enigo.key_up(Key::Control);
 
-						sleep(Duration::from_millis(2000));
-						enigo.mouse_move_to(
-							SEND_CODE.x.try_into().unwrap(),
-							SEND_CODE.y.try_into().unwrap(),
-						);
-						enigo.mouse_click(MouseButton::Left);
+					// 	sleep(Duration::from_millis(2000));
+					// 	enigo.mouse_move_to(
+					// 		SEND_CODE.x.try_into().unwrap(),
+					// 		SEND_CODE.y.try_into().unwrap(),
+					// 	);
+					// 	enigo.mouse_click(MouseButton::Left);
 
-						sleep(Duration::from_millis(2000));
-						enigo.mouse_move_to(
-							CHAR_SELECT.x.try_into().unwrap(),
-							CHAR_SELECT.y.try_into().unwrap(),
-						);
-						enigo.mouse_click(MouseButton::Left);
+					// 	sleep(Duration::from_millis(2000));
+					// 	enigo.mouse_move_to(
+					// 		CHAR_SELECT.x.try_into().unwrap(),
+					// 		CHAR_SELECT.y.try_into().unwrap(),
+					// 	);
+					// 	enigo.mouse_click(MouseButton::Left);
 
-						sleep(Duration::from_millis(4000));
+					// 	sleep(Duration::from_millis(4000));
 					}
 				}
 				println!("{:?}", &status);
@@ -254,7 +269,7 @@ fn playAudio() {
 	let welcome = File::open("src/resources/Tristam.ogg").unwrap();
 	let source = rodio::Decoder::new(BufReader::new(welcome)).unwrap();
 	stream_handle.play_raw(source.convert_samples()).expect("TODO: panic message");
-	sleep(Duration::from_millis(6000));
+	sleep(Duration::from_millis(1000));
 }
 
 fn main() {
