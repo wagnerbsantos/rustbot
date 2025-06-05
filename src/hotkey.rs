@@ -67,12 +67,13 @@ pub fn use_monk_hotkeys(status: &Status) {
             click(WASTE_MANA_HOTKEY); // attack
         }
     }
-
+    if status.mana > 0 {
     // spells
-    if status.life == 1 {
-        click(HEAL_HOTKEY)
-    } else if status.life < 1 {
-        click(BIG_HEAL_HOTKEY)
+        if status.life < 3  {
+            click(HEAL_HOTKEY)
+        } else if status.life < 2 {
+            click(BIG_HEAL_HOTKEY)
+        }
     }
     if status.mana >= 3 && status.ladder_cooldown % 3 == 0{
         if status.is_attacking {

@@ -1,10 +1,7 @@
 use crate::hotkey::click;
 use crate::model::{Color, Coord, Image, Status};
-use crate::movement::move_to;
 use crate::screen::has_color_at_position;
-use enigo::{Enigo, Key, KeyboardControllable, MouseButton, MouseControllable};
-use shuteye::sleep;
-use std::time::Duration;
+use enigo::{Key};
 
 pub const ENEMY_1_POS: Coord = Coord { x: 157, y: 62 };
 pub const ENEMY_1_ATTACK: Coord = Coord { x: 4, y: 49 };
@@ -32,29 +29,6 @@ pub const NEXT_ENEMY_HOTKEY: Key = Key::Layout('e');
 pub const EQUIP_SWORD_HOTKEY: Key = Key::Layout('1');
 pub const EQUIP_SPEAR_HOTKEY: Key = Key::Layout('2');
 
-struct LootCoords;
-impl LootCoords {
-    pub const LOOT_NW: Coord = Coord { x: 890, y: 400 };
-    pub const LOOT_N: Coord = Coord { x: 950, y: 400 };
-    pub const LOOT_NE: Coord = Coord { x: 1025, y: 400 };
-    pub const LOOT_W: Coord = Coord { x: 890, y: 480 };
-    pub const LOOT_E: Coord = Coord { x: 1025, y: 480 };
-    pub const LOOT_SW: Coord = Coord { x: 890, y: 550 };
-    pub const LOOT_S: Coord = Coord { x: 950, y: 550 };
-    pub const LOOT_SE: Coord = Coord { x: 1025, y: 550 };
-}
-impl LootCoords {
-    const VALUES: [Coord; 8] = [
-        Self::LOOT_NW,
-        Self::LOOT_N,
-        Self::LOOT_NE,
-        Self::LOOT_E,
-        Self::LOOT_W,
-        Self::LOOT_SW,
-        Self::LOOT_S,
-        Self::LOOT_SE,
-    ];
-}
 pub fn use_attack(image: &Image, status: &mut Status) -> i32 {
     check_weapon(image);
     let enemy_count = count_enemies(image);
@@ -96,15 +70,6 @@ fn check_weapon(image: &Image) {
 
 pub fn loot() {
     click(Key::F12)
-    // let mut enigo = Enigo::new();
-    // enigo.key_down(Key::Shift);
-    // for loot in LootCoords::VALUES.iter() {
-    //     quick_loot(loot, &mut enigo);
-    //     sleep(Duration::from_millis(100));
-    // }
-    // enigo.key_up(Key::Shift);
-    // sleep(Duration::from_millis(200));
-    // enigo.mouse_move_to(1748, 150);
 }
 
 pub fn set_follow(image: &Image) {
