@@ -12,6 +12,7 @@ pub const MANA_BAR_COLOR: &Color = &Color {
     g: 80,
     b: 218,
 };
+pub const BUG_COLOR: &Color = &Color { r: 0, g: 0, b: 0 };
 
 pub const HEALING_COOLDOWN_POS: &Coord = &Coord { x: 381, y: 945 };
 pub const HEALING_COOLDOWN_COLOR: &Color = &Color {
@@ -108,16 +109,23 @@ pub fn has_color_at_position(
     position: &Coord,
     color: &Color,
     isprint: bool,
+    is_buggy: bool,
 ) -> bool {
-    &get_color_at_position(image, position, isprint) == color
+    let result = &get_color_at_position(image, position, isprint);
+    result == color || (result == BUG_COLOR && is_buggy)
 }
 
-pub fn get_color_positions_in_area(image: &Image, area: &Area, color: &Color) -> Vec<Coord> {
+pub fn get_color_positions_in_area(
+    image: &Image,
+    area: &Area,
+    color: &Color,
+    is_buggy: bool,
+) -> Vec<Coord> {
     let mut result = Vec::new();
     for x in area.top_left.x..area.bot_right.x {
         for y in area.top_left.y..area.bot_right.y {
             let coord = Coord { x, y };
-            if has_color_at_position(image, &coord, color, false) {
+            if has_color_at_position(image, &coord, color, false, is_buggy) {
                 result.push(coord);
             }
         }

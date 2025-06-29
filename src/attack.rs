@@ -79,14 +79,37 @@ pub fn use_attack(image: &Image, status: &mut Status) -> i32 {
 }
 
 fn check_weapon(image: &Image) {
-    let has_no_weapon =
-        has_color_at_position(image, &EMPTY_WEAPON_POSITION, &EMPTY_WEAPON_COLOR, false);
-    let has_no_ranged_weapon = 
-        has_color_at_position(image, &NO_WEAPON_2_POSITION, &Color {r: 68, g: 68, b: 69}, false);
-    let has_ranged_weapon_equiped = 
-        has_color_at_position(image, &WEAPON_2_EQUIPED_POSITION, &Color {r: 41, g: 41, b: 41}, false);
+    let has_no_weapon = has_color_at_position(
+        image,
+        &EMPTY_WEAPON_POSITION,
+        &EMPTY_WEAPON_COLOR,
+        false,
+        false,
+    );
+    let has_no_ranged_weapon = has_color_at_position(
+        image,
+        &NO_WEAPON_2_POSITION,
+        &Color {
+            r: 68,
+            g: 68,
+            b: 69,
+        },
+        false,
+        false,
+    );
+    let has_ranged_weapon_equiped = has_color_at_position(
+        image,
+        &WEAPON_2_EQUIPED_POSITION,
+        &Color {
+            r: 41,
+            g: 41,
+            b: 41,
+        },
+        false,
+        false,
+    );
     if has_no_weapon {
-            click(EQUIP_SWORD_HOTKEY);
+        click(EQUIP_SWORD_HOTKEY);
     } else {
         if !has_ranged_weapon_equiped && !has_no_ranged_weapon {
             click(EQUIP_SPEAR_HOTKEY)
@@ -108,7 +131,13 @@ pub fn loot() {
 }
 
 pub fn set_follow(image: &Image) {
-    if has_color_at_position(image, &FOLLOW_BUTTON, &FOLLOW_BUTTON_COLOR_DISABLED, false) { 
+    if has_color_at_position(
+        image,
+        &FOLLOW_BUTTON,
+        &FOLLOW_BUTTON_COLOR_DISABLED,
+        false,
+        false,
+    ) {
         click(Key::Layout('\\'));
     }
 }
@@ -137,6 +166,7 @@ pub fn count_enemies(image: &Image) -> i32 {
             },
             &ENEMY_BAR_COLOR,
             false,
+            false,
         ) {
             count += 1;
         }
@@ -154,6 +184,7 @@ pub fn get_attacker(image: &Image, enemy_count: i32) -> Option<i32> {
                 y: ENEMY_1_ATTACK.y + i * ENEMY_OFFSET,
             },
             &ENEMY_ATTACK_COLOR,
+            false,
             false,
         )) {
             found = i as i32;
