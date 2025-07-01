@@ -1,15 +1,33 @@
 use crate::model::{Area, Color, Coord, Image};
-// LIFE
-pub const HIGH_LIFE_POS: &Coord = &Coord { x: 860, y: 48 };
-pub const MID_LIFE_POS: &Coord = &Coord { x: 680, y: 48 };
-pub const LOW_LIFE_POS: &Coord = &Coord { x: 480, y: 48 };
-pub const LIFE_COLOR: &Color = &Color { r: 0, g: 50, b: 0 };
 
-// MANA
-pub const HIGH_MANA_POS: &Coord = &Coord { x: 1050, y: 40 };
-pub const MID_MANA_POS: &Coord = &Coord { x: 1360, y: 40 };
-pub const LOW_MANA_POS: &Coord = &Coord { x: 1450, y: 40 };
-pub const MANA_COLOR: &Color = &Color { r: 0, g: 0, b: 100 };
+
+pub const LIFE_BAR_START: &Coord = &Coord { x: 1768, y: 317 };
+pub const LIFE_BAR_COLOR: &Color = &Color {
+    r: 219,
+    g: 79,
+    b: 79,
+};
+
+pub const MANA_BAR_START: &Coord = &Coord { x: 1768, y: 330 };
+pub const MANA_BAR_COLOR: &Color = &Color {
+    r: 83,
+    g: 80,
+    b: 218,
+};
+
+pub const HEALING_COOLDOWN_POS: &Coord = &Coord { x: 381, y: 945 };
+pub const HEALING_COOLDOWN_COLOR: &Color = &Color {
+    r: 255,
+    g: 255,
+    b: 255,
+};
+
+pub const MANA_POT_COOLDOWN_POS: &Coord = &Coord { x: 368, y: 664 };
+pub const MANA_POT_COOLDOWN_COLOR: &Color = &Color {
+    r: 223,
+    g: 223,
+    b: 223,
+};
 
 //MAP
 pub const MAP_AREA: &Area = &Area {

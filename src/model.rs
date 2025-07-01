@@ -36,4 +36,7 @@ pub struct Status {
     pub ladder_cooldown: i64,
     pub has_full_mantra: bool,
     pub is_monk: bool,
+    pub healing_cooldown: bool,
+    pub mana_pot_cooldown: bool,
+    pub danger_count: u8,
 }

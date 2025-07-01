@@ -9,14 +9,14 @@ pub const ENEMY_OFFSET: u32 = 22;
 pub const ENEMY_BAR_COLOR: Color = Color { r: 0, g: 0, b: 0 };
 pub const ENEMY_ATTACK_COLOR: Color = Color { r: 255, g: 0, b: 0 };
 pub const FOLLOW_BUTTON: Coord = Coord { x: 1902, y: 182 };
-pub const EMPTY_WEAPON_POSITION: Coord = Coord { x: 1760, y: 227 };
-pub const NO_WEAPON_2_POSITION: Coord = Coord { x: 1535, y: 286 };
-pub const WEAPON_2_EQUIPED_POSITION: Coord = Coord { x: 1534, y: 285 };
-pub const EMPTY_WEAPON_COLOR: Color = Color {
-    r: 118,
-    g: 120,
-    b: 123,
-};
+// pub const EMPTY_WEAPON_POSITION: Coord = Coord { x: 1760, y: 227 };
+// pub const NO_WEAPON_2_POSITION: Coord = Coord { x: 1535, y: 286 };
+// pub const WEAPON_2_EQUIPED_POSITION: Coord = Coord { x: 1534, y: 285 };
+// pub const EMPTY_WEAPON_COLOR: Color = Color {
+//     r: 118,
+//     g: 120,
+//     b: 123,
+// };
 
 pub const FOLLOW_BUTTON_COLOR_DISABLED: Color = Color {
     r: 201,
@@ -26,11 +26,11 @@ pub const FOLLOW_BUTTON_COLOR_DISABLED: Color = Color {
 
 pub const LAST_ENEMY_HOTKEY: Key = Key::Layout('p');
 pub const NEXT_ENEMY_HOTKEY: Key = Key::Layout('e');
-pub const EQUIP_SWORD_HOTKEY: Key = Key::Layout('1');
-pub const EQUIP_SPEAR_HOTKEY: Key = Key::Layout('2');
+// pub const EQUIP_SWORD_HOTKEY: Key = Key::Layout('1');
+// pub const EQUIP_SPEAR_HOTKEY: Key = Key::Layout('2');
 
 pub fn use_attack(image: &Image, status: &mut Status) -> i32 {
-    check_weapon(image);
+    // check_weapon(image);
     let enemy_count = count_enemies(image);
     if enemy_count > 0 {
         let target = get_attacker(image, enemy_count);
@@ -52,21 +52,21 @@ pub fn use_attack(image: &Image, status: &mut Status) -> i32 {
     enemy_count
 }
 
-fn check_weapon(image: &Image) {
-    let has_no_weapon =
-        has_color_at_position(image, &EMPTY_WEAPON_POSITION, &EMPTY_WEAPON_COLOR, false);
-    let has_no_ranged_weapon = 
-        has_color_at_position(image, &NO_WEAPON_2_POSITION, &Color {r: 68, g: 68, b: 69}, false);
-    let has_ranged_weapon_equiped = 
-        has_color_at_position(image, &WEAPON_2_EQUIPED_POSITION, &Color {r: 41, g: 41, b: 41}, false);
-    if has_no_weapon {
-            click(EQUIP_SWORD_HOTKEY);
-    } else {
-        if !has_ranged_weapon_equiped && !has_no_ranged_weapon {
-            click(EQUIP_SPEAR_HOTKEY)
-        }
-    }
-}
+// fn check_weapon(image: &Image) {
+//     let has_no_weapon =
+//         has_color_at_position(image, &EMPTY_WEAPON_POSITION, &EMPTY_WEAPON_COLOR, false);
+//     let has_no_ranged_weapon = 
+//         has_color_at_position(image, &NO_WEAPON_2_POSITION, &Color {r: 68, g: 68, b: 69}, false);
+//     let has_ranged_weapon_equiped = 
+//         has_color_at_position(image, &WEAPON_2_EQUIPED_POSITION, &Color {r: 41, g: 41, b: 41}, false);
+//     if has_no_weapon {
+//             click(EQUIP_SWORD_HOTKEY);
+//     } else {
+//         if !has_ranged_weapon_equiped && !has_no_ranged_weapon {
+//             click(EQUIP_SPEAR_HOTKEY)
+//         }
+//     }
+// }
 
 pub fn loot() {
     click(Key::F12)

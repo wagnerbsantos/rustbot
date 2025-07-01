@@ -1,6 +1,6 @@
 use crate::model::{Color, Coord, Image, Status};
 use crate::screen::{get_color_positions_in_area, has_color_at_position, MAP_AREA};
-use crate::waypoints::*;
+use crate::{playAudio, waypoints::*};
 use enigo::{Enigo, MouseButton, MouseControllable};
 use shuteye::sleep;
 use std::time::Duration;
@@ -40,6 +40,7 @@ pub fn use_movement(image: &Image, status: &mut Status) {
 	println!("{}", coords.len());
 	println!("{}", sanitized_coords.len());
 	if sanitized_coords.len() > 0 {
+		status.danger_count = 0;
 		let next = sanitized_coords.get(0).unwrap();
 		println!("{:?}", next);
 		let under_checkpoint = next.x == MAP_CENTER.x && ((next.y as i32 - MAP_CENTER.y as i32).abs() <=1);
@@ -61,6 +62,10 @@ pub fn use_movement(image: &Image, status: &mut Status) {
 			status.is_moving = true;
 		}
 	} else {
+		status.danger_count = status.danger_count + 1;
+		if status.danger_count > 20 {
+			playAudio();
+		}
 		status.next_waypoint = (status.next_waypoint + 1) % (WAYPOINTS.len() - 1);
 	}
 }

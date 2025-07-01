@@ -35,28 +35,33 @@ fn should_continue(image: &Image) -> u8 {
 	0
 }
 
+
 fn get_life(image: &Image) -> u8 {
-	if has_greater_color_at_position(image, HIGH_LIFE_POS, LIFE_COLOR) {
-		3
-	} else if has_greater_color_at_position(image, MID_LIFE_POS, LIFE_COLOR) {
-		2
-	} else if has_greater_color_at_position(image, LOW_LIFE_POS, LIFE_COLOR) {
-		1
-	} else {
-		0
-	}
+    let mut life_pos = Coord {
+        x: LIFE_BAR_START.x,
+        y: LIFE_BAR_START.y,
+    };
+    for i in 0..9 {
+        if !has_color_at_position(image, &life_pos, LIFE_BAR_COLOR, false) {
+            return i as u8;
+        }
+        life_pos.x = life_pos.x + 10;
+    }
+    return 10;
 }
 
 fn get_mana(image: &Image) -> u8 {
-	if has_greater_color_at_position(image, HIGH_MANA_POS, MANA_COLOR) {
-		3
-	} else if has_greater_color_at_position(image, MID_MANA_POS, MANA_COLOR ) {
-		2
-	} else if has_greater_color_at_position(image, LOW_MANA_POS, MANA_COLOR) {
-		1
-	} else {
-		0
-	}
+    let mut mana_pos = Coord {
+        x: MANA_BAR_START.x,
+        y: MANA_BAR_START.y,
+    };
+    for i in 0..9 {
+        if !has_color_at_position(image, &mana_pos, MANA_BAR_COLOR, false) {
+            return i as u8;
+        }
+        mana_pos.x = mana_pos.x + 9;
+    }
+    return 10;
 }
 
 fn use_image(image: &Image, mut status: Status) -> Status {
@@ -69,6 +74,10 @@ fn use_image(image: &Image, mut status: Status) -> Status {
 	status.mana = get_mana(image);
 	status.has_cap = get_has_cap(image);
 	status.has_full_mantra = get_has_full_mantra(image);
+    status.healing_cooldown =
+    has_color_at_position(image, HEALING_COOLDOWN_POS, HEALING_COOLDOWN_COLOR, false);
+    status.mana_pot_cooldown =
+    has_color_at_position(image, MANA_POT_COOLDOWN_POS, MANA_POT_COOLDOWN_COLOR, false);
 
 	status
 }
@@ -117,7 +126,10 @@ fn run_gameloop() {
 		has_cap: true,
 		ladder_cooldown: 10,
 		has_full_mantra: false,
-		is_monk: true
+		is_monk: true,
+        healing_cooldown: false,
+        mana_pot_cooldown: false,
+		danger_count: 0
 	};
 	loop {
 		let now = Instant::now();
@@ -255,16 +267,16 @@ fn run_gameloop() {
 
 		let elapsed = now.elapsed();
 		println!("Elapsed: {:.2?}", elapsed);
-		if elapsed.as_millis() < 850 {
-			sleep(Duration::from_millis(850 - elapsed.as_millis() as u64));
+		if elapsed.as_millis() < 1000 {
+			sleep(Duration::from_millis(1000 - elapsed.as_millis() as u64));
 		} else {
-			sleep(Duration::from_millis(1000));
+			sleep(Duration::from_millis(520));
 		}
 		//break;
 	}
 }
 
-fn playAudio() {
+pub fn playAudio() {
 	let (stream, stream_handle) = rodio::OutputStream::try_default().unwrap();
 	let welcome = File::open("src/resources/Tristam.ogg").unwrap();
 	let source = rodio::Decoder::new(BufReader::new(welcome)).unwrap();
