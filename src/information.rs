@@ -29,13 +29,6 @@ pub fn should_continue(image: &Image) -> u8 {
     if !has_color_at_position(image, ICON_SELECTED, ICON_SELECTED_COLOR, false, false) {
         println!("Tibia not selected");
         return 1;
-    } else if has_color_at_position(image, LOGIN_SCREEN, LOGIN_SCREEN_COLOR, false, false) {
-        println!("At login screen");
-        if has_color_at_position(image, WAITING_EMAIL, WAITING_EMAIL_COLOR, false, false) {
-            println!("Wating email");
-            return 3;
-        }
-        return 2;
     }
     0
 }

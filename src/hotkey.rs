@@ -10,20 +10,16 @@ pub const FOOD_TIMER: i64 = 300;
 pub const SMALL_HEAL_HOTKEY: Key = Key::F1;
 pub const HEAL_HOTKEY: Key = Key::F2;
 pub const BIG_HEAL_HOTKEY: Key = Key::F3;
-pub const MANTRA_SKILL_HOTKEY: Key = Key::F4;
 pub const BIG_MANA_HOTKEY: Key = Key::F5;
 pub const MEDIUM_MANA_HOTKEY: Key = Key::F6;
 pub const SMALL_MANA_HOTKEY: Key = Key::F7;
 pub const FOOD_HOTKEY: Key = Key::F8;
-
-// pub const EQUIP_RANGED_HOTKEY: Key = Key::Layout('2');
 
 pub fn use_hotkeys(status: &Status) {
     if status.life == 0 && status.mana == 0 {
         return;
     }
     use_general_hotkeys(status);
-    //use_monk_hotkeys(status);
 }
 
 pub fn use_general_hotkeys(status: &Status) {
