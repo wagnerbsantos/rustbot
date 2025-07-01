@@ -29,30 +29,62 @@ pub fn use_hotkeys(status: &Status) {
 }
 
 pub fn use_general_hotkeys(status: &Status) {
+    let mut done = 0;
     // items
-    if !status.mana_pot_cooldown {
-        if status.mana <= 4 && status.mana != 0 {
-            click(MANA_POT_HOTKEY);
+    if !status.item_cooldown && done == 0 {
+        if status.mana <= 10 && done == 0 {
+            if status.big_mana_available {
+                click(BIG_MANA_HOTKEY);
+                done = 1;
+            } else if status.medium_mana_available {
+                click(MEDIUM_MANA_HOTKEY);
+                done = 1;
+            } else if status.small_mana_available {
+                click(SMALL_MANA_HOTKEY);
+                done = 1;
+            }
+            sleep(Duration::from_millis(50));
+        }
+        if status.mana <= 12 && done == 0 {
+            if status.medium_mana_available {
+                click(MEDIUM_MANA_HOTKEY);
+                done = 1;
+            } else if status.small_mana_available {
+                click(SMALL_MANA_HOTKEY);
+                done = 1;
+            }
+            sleep(Duration::from_millis(50));
+        }
+        if status.mana <= 16 && done == 0 {
+            if status.small_mana_available {
+                click(SMALL_MANA_HOTKEY);
+                done = 1;
+            }
             sleep(Duration::from_millis(50));
         }
     }
-    if status.food_timer == 0 {
+    if !status.healing_cooldown && done == 0 {
+        // monk
+        if status.life <= 13 && done == 0 {
+            click(BIG_HEAL_HOTKEY);
+            done = 1;
+        }
+        if status.life <= 15 && done == 0 {
+            click(HEAL_HOTKEY);
+            done = 1;
+        }
+        if status.life <= 17 && done == 0 {
+            click(SMALL_HEAL_HOTKEY);
+            done = 1;
+        }
+    }
+    if status.food_timer == 0 && done == 0 {
         click(FOOD_HOTKEY);
-        sleep(Duration::from_millis(100));
-        click(FOOD_HOTKEY_2);
-        // sleep(Duration::from_millis(100));
-        // click(EQUIP_RANGED_HOTKEY);
+        done = 1;
     }
 }
 
 pub fn use_items_hotkeys(status: &Status) {
-    if !status.healing_cooldown && status.life != 0 {
-        if status.life < 7 {
-            click(BIG_HEAL_HOTKEY)
-        } else if status.life < 9 {
-            click(HEAL_HOTKEY)
-        }
-    }
     if status.mana >= 8 && status.ladder_cooldown % 3 == 0{
         if status.is_attacking {
             click(WASTE_MANA_HOTKEY);
@@ -69,18 +101,7 @@ pub fn use_monk_hotkeys(status: &Status) {
         } else {
             click(WASTE_MANA_HOTKEY); // attack
         }
-    }
-    if status.mana > 0 {
-    // spells
-        if !status.healing_cooldown && status.life != 0 {
-            if status.life < 6 {
-                click(BIG_HEAL_HOTKEY)
-            } else if status.life < 8 {
-                click(HEAL_HOTKEY)
-            }
-        }
-    }
-    if status.mana >= 8 && status.ladder_cooldown % 3 == 0{
+    } else if status.mana >= 8 && status.ladder_cooldown % 3 == 0{
         if status.is_attacking {
             click(WASTE_MANA_HOTKEY);
         } else {
