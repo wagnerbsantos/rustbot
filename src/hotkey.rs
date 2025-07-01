@@ -17,6 +17,7 @@ pub const BIG_MANA_HOTKEY: Key = Key::F5;
 pub const MEDIUM_MANA_HOTKEY: Key = Key::F6;
 pub const SMALL_MANA_HOTKEY: Key = Key::F7;
 pub const FOOD_HOTKEY: Key = Key::F8;
+pub const FOOD_HOTKEY_2: Key = Key::F9;
 
 pub fn use_hotkeys(status: &Status) {
     use_general_hotkeys(status);

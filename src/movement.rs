@@ -1,6 +1,6 @@
 use crate::model::{Color, Coord, Image, Status};
 use crate::screen::{get_color_positions_in_area, has_color_at_position, MAP_AREA};
-use crate::{playAudio, waypoints::*};
+use crate::{play_audio, waypoints::*};
 use enigo::{Enigo, MouseButton, MouseControllable};
 use shuteye::sleep;
 use std::time::Duration;
@@ -64,7 +64,7 @@ pub fn use_movement(image: &Image, status: &mut Status) {
 	} else {
 		status.danger_count = status.danger_count + 1;
 		if status.danger_count > 20 {
-			playAudio();
+			play_audio();
 		}
 		status.next_waypoint = (status.next_waypoint + 1) % (WAYPOINTS.len() - 1);
 	}
