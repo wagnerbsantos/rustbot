@@ -30,41 +30,44 @@ pub fn use_general_hotkeys(status: &Status) {
     let mut done = 0;
     // items
     if !status.item_cooldown && done == 0 {
-        if status.mana <= 12 && done == 0 {
+        if status.mana <= 10 && done == 0 {
             if status.big_mana_available {
                 click(BIG_MANA_HOTKEY);
+                done = 1;
             } else if status.medium_mana_available {
                 click(MEDIUM_MANA_HOTKEY);
+                done = 1;
             } else if status.small_mana_available {
                 click(SMALL_MANA_HOTKEY);
+                done = 1;
             }
             sleep(Duration::from_millis(50));
-            done = 1;
         }
-        if status.mana <= 14 && done == 0 {
+        if status.mana <= 12 && done == 0 {
             if status.medium_mana_available {
                 click(MEDIUM_MANA_HOTKEY);
+                done = 1;
             } else if status.small_mana_available {
                 click(SMALL_MANA_HOTKEY);
+                done = 1;
             }
             sleep(Duration::from_millis(50));
-            done = 1;
         }
         if status.mana <= 16 && done == 0 {
             if status.small_mana_available {
                 click(SMALL_MANA_HOTKEY);
+                done = 1;
             }
             sleep(Duration::from_millis(50));
-            done = 1;
         }
     }
     if !status.healing_cooldown && done == 0 {
         // monk
-        if status.life <= 15 && done == 0 {
+        if status.life <= 13 && done == 0 {
             click(BIG_HEAL_HOTKEY);
             done = 1;
         }
-        if status.life <= 16 && done == 0 {
+        if status.life <= 15 && done == 0 {
             click(HEAL_HOTKEY);
             done = 1;
         }
