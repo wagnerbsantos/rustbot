@@ -8,6 +8,7 @@ use std::process::Command;
 use std::time::{Duration, Instant};
 
 use crate::attack::use_attack;
+use crate::information::use_image;
 use crate::movement::use_movement;
 use crate::screen::*;
 use enigo::*;
@@ -19,6 +20,7 @@ mod model;
 mod movement;
 mod screen;
 mod waypoints;
+mod information;
 
 fn should_continue(image: &Image) -> u8 {
 	if !has_color_at_position(image, ICON_SELECTED, ICON_SELECTED_COLOR, false) {
@@ -64,23 +66,6 @@ fn get_mana(image: &Image) -> u8 {
     return 10;
 }
 
-fn use_image(image: &Image, mut status: Status) -> Status {
-	status.food_timer = status.food_timer - 1;
-	status.ladder_cooldown = status.ladder_cooldown - 1;
-	if !status.is_attacking {
-		status.move_timer = status.move_timer - 1;
-	}
-	status.life = get_life(image);
-	status.mana = get_mana(image);
-	status.has_cap = get_has_cap(image);
-	status.has_full_mantra = get_has_full_mantra(image);
-    status.healing_cooldown =
-    has_color_at_position(image, HEALING_COOLDOWN_POS, HEALING_COOLDOWN_COLOR, false);
-    status.mana_pot_cooldown =
-    has_color_at_position(image, MANA_POT_COOLDOWN_POS, MANA_POT_COOLDOWN_COLOR, false);
-
-	status
-}
 
 fn get_has_full_mantra(image: &Image) -> bool {
 	let mantra_pos = Coord { x: 1029, y: 77 };
@@ -129,7 +114,11 @@ fn run_gameloop() {
 		is_monk: true,
         healing_cooldown: false,
         mana_pot_cooldown: false,
-		danger_count: 0
+		danger_count: 0,
+		big_mana_available: false,
+		medium_mana_available: false,
+		item_cooldown: false,
+		small_mana_available: false
 	};
 	loop {
 		let now = Instant::now();

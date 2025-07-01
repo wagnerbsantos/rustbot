@@ -8,14 +8,15 @@ use shuteye::sleep;
 pub const FOOD_TIMER: i64 = 60;
 
 //HOTKEYS
-pub const WASTE_MANA_HOTKEY: Key = Key::F1;
+pub const WASTE_MANA_HOTKEY: Key = Key::PageUp;
+pub const MANTRA_SKILL_HOTKEY: Key = Key::PageDown;
+pub const SMALL_HEAL_HOTKEY: Key = Key::F1;
 pub const HEAL_HOTKEY: Key = Key::F2;
 pub const BIG_HEAL_HOTKEY: Key = Key::F3;
-pub const MANTRA_SKILL_HOTKEY: Key = Key::F4;
-pub const MANA_POT_HOTKEY: Key = Key::F5;
-pub const LIFE_POT_HOTKEY: Key = Key::F6;
-pub const FOOD_HOTKEY: Key = Key::F7;
-pub const FOOD_HOTKEY_2: Key = Key::F8;
+pub const BIG_MANA_HOTKEY: Key = Key::F5;
+pub const MEDIUM_MANA_HOTKEY: Key = Key::F6;
+pub const SMALL_MANA_HOTKEY: Key = Key::F7;
+pub const FOOD_HOTKEY: Key = Key::F8;
 
 pub fn use_hotkeys(status: &Status) {
     use_general_hotkeys(status);
