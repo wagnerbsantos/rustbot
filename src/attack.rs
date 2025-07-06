@@ -38,7 +38,7 @@ pub fn use_attack(image: &Image, status: &mut Status) -> i32 {
             loot();
             status.is_attacking = false;
         }
-        use_target(target);
+        use_target(target, status.no_dps, status.ladder_cooldown);
         set_follow(image);
         status.is_attacking = true;
         loot();
@@ -73,15 +73,17 @@ pub fn loot() {
 }
 
 pub fn set_follow(image: &Image) {
-    if has_color_at_position(image, &FOLLOW_BUTTON, &FOLLOW_BUTTON_COLOR_DISABLED, false) { 
+    if has_color_at_position(image, &FOLLOW_BUTTON, &FOLLOW_BUTTON_COLOR_DISABLED, false, false) { 
         click(Key::Layout('\\'));
     }
 }
 
-pub fn use_target(target: Option<i32>) {
+pub fn use_target(target: Option<i32>, no_dps: bool, cooldown: i64) {
     match target {
         Some(t) => {
             if t > 2 {
+                click(LAST_ENEMY_HOTKEY);
+            }if no_dps && cooldown % 5 == 0{
                 click(LAST_ENEMY_HOTKEY);
             }
         }
@@ -102,6 +104,7 @@ pub fn count_enemies(image: &Image) -> i32 {
             },
             &ENEMY_BAR_COLOR,
             false,
+            false,
         ) {
             count += 1;
         }
@@ -119,6 +122,7 @@ pub fn get_attacker(image: &Image, enemy_count: i32) -> Option<i32> {
                 y: ENEMY_1_ATTACK.y + i * ENEMY_OFFSET,
             },
             &ENEMY_ATTACK_COLOR,
+            false,
             false,
         )) {
             found = i as i32;

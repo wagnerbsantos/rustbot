@@ -61,7 +61,9 @@ fn run_gameloop() {
 		big_mana_available: false,
 		medium_mana_available: false,
 		item_cooldown: false,
-		small_mana_available: false
+		small_mana_available: false,
+		attack_cooldown: false,
+		no_dps: false,
 	};
 	loop {
 		let now = Instant::now();

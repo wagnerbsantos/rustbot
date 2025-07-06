@@ -21,11 +21,7 @@ pub const FOOD_HOTKEY_2: Key = Key::F9;
 
 pub fn use_hotkeys(status: &Status) {
     use_general_hotkeys(status);
-    if status.is_monk {
-        use_monk_hotkeys(status);
-    } else {    
-        use_items_hotkeys(status);
-    }
+    use_monk_hotkeys(status);
 }
 
 pub fn use_general_hotkeys(status: &Status) {
@@ -55,7 +51,7 @@ pub fn use_general_hotkeys(status: &Status) {
             }
             sleep(Duration::from_millis(50));
         }
-        if status.mana <= 16 && done == 0 {
+        if status.mana <= 14 && done == 0 {
             if status.small_mana_available {
                 click(SMALL_MANA_HOTKEY);
                 done = 1;
@@ -73,7 +69,7 @@ pub fn use_general_hotkeys(status: &Status) {
             click(HEAL_HOTKEY);
             done = 1;
         }
-        if status.life <= 17 && done == 0 {
+        if status.life <= 16 && done == 0 {
             click(SMALL_HEAL_HOTKEY);
             done = 1;
         }
@@ -84,27 +80,18 @@ pub fn use_general_hotkeys(status: &Status) {
     }
 }
 
-pub fn use_items_hotkeys(status: &Status) {
-    if status.mana >= 8 && status.ladder_cooldown % 3 == 0{
-        if status.is_attacking {
-            click(WASTE_MANA_HOTKEY);
-        } else {
-            click(Key::F11)
-        }
-    }
-}
 
 pub fn use_monk_hotkeys(status: &Status) {
-    if status.life < 9 && status.is_attacking && status.ladder_cooldown % 3 == 0 {
+    if status.life <= 17 && status.is_attacking && !status.attack_cooldown {
         if status.has_full_mantra {
             click(MANTRA_SKILL_HOTKEY);
         } else {
             click(WASTE_MANA_HOTKEY); // attack
         }
-    } else if status.mana >= 8 && status.ladder_cooldown % 3 == 0{
-        if status.is_attacking {
+    } else if status.mana >= 17 {
+        if status.is_attacking && !status.attack_cooldown{
             click(WASTE_MANA_HOTKEY);
-        } else {
+        } else if !status.healing_cooldown{
             click(Key::F11)
         }
     }

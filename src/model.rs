@@ -43,4 +43,6 @@ pub struct Status {
     pub big_mana_available : bool,
     pub medium_mana_available : bool,
     pub small_mana_available : bool,
+    pub attack_cooldown: bool,
+    pub no_dps: bool,
 }

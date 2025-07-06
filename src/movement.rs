@@ -24,13 +24,13 @@ pub fn use_movement(image: &Image, status: &mut Status) {
 	let coords = get_color_positions_in_area(
 		image,
 		MAP_AREA,
-		WAYPOINTS.get(status.next_waypoint).unwrap(),
+		WAYPOINTS.get(status.next_waypoint).unwrap(), false
 	);
 	let mut sanitized_coords: Vec<Coord> = coords.iter().filter_map(|coord|
-		if has_color_at_position(image, &Coord { x: coord.x - WAYPOINT_OFFSET, y: coord.y }, &WAYPOINT_BORDER_COLOR, true) &&
-			has_color_at_position(image, &Coord { x: coord.x + WAYPOINT_OFFSET, y: coord.y }, &WAYPOINT_BORDER_COLOR, true) &&
-			has_color_at_position(image, &Coord { x: coord.x, y: coord.y + WAYPOINT_OFFSET }, &WAYPOINT_BORDER_COLOR, true) &&
-			has_color_at_position(image, &Coord { x: coord.x, y: coord.y - WAYPOINT_OFFSET }, &WAYPOINT_BORDER_COLOR, true)
+		if has_color_at_position(image, &Coord { x: coord.x - WAYPOINT_OFFSET, y: coord.y }, &WAYPOINT_BORDER_COLOR, true, false,) &&
+			has_color_at_position(image, &Coord { x: coord.x + WAYPOINT_OFFSET, y: coord.y }, &WAYPOINT_BORDER_COLOR, true, false) &&
+			has_color_at_position(image, &Coord { x: coord.x, y: coord.y + WAYPOINT_OFFSET }, &WAYPOINT_BORDER_COLOR, true, false) &&
+			has_color_at_position(image, &Coord { x: coord.x, y: coord.y - WAYPOINT_OFFSET }, &WAYPOINT_BORDER_COLOR, true, false)
 		{
 			Some(Coord { x: coord.x, y: coord.y })
 		} else {

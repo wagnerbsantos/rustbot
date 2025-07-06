@@ -21,6 +21,8 @@ pub fn use_image(image: &Image, mut status: Status) -> Status {
     status.big_mana_available = get_item_available_by_slot(image, 15);
     status.medium_mana_available = get_item_available_by_slot(image, 16);
     status.small_mana_available = get_item_available_by_slot(image, 17);
+    status.attack_cooldown = get_item_on_cooldown_by_slot(image, 3);
+    status.no_dps = has_color_at_position(image, &Coord{x: 149, y: 469}, &Color{r:206, g:31, b:22}, false, true);
 
     status
 }
