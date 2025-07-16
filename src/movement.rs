@@ -1,7 +1,8 @@
+use crate::hotkey::{self, click, HEAL_HOTKEY};
 use crate::model::{Color, Coord, Image, Status};
 use crate::screen::{get_color_positions_in_area, has_color_at_position, MAP_AREA};
 use crate::{play_audio, waypoints::*};
-use enigo::{Enigo, MouseButton, MouseControllable};
+use enigo::{Enigo, Key, MouseButton, MouseControllable};
 use shuteye::sleep;
 use std::time::Duration;
 
@@ -62,9 +63,12 @@ pub fn use_movement(image: &Image, status: &mut Status) {
 			status.is_moving = true;
 		}
 	} else {
-		status.danger_count = status.danger_count + 1;
+		if status.danger_count < 20 {
+			status.danger_count = status.danger_count + 1;
+		}
 		if status.danger_count > 20 {
-			play_audio();
+			click(Key::Escape);
+			status.danger_count = 0;
 		}
 		status.next_waypoint = (status.next_waypoint + 1) % (WAYPOINTS.len() - 1);
 	}
