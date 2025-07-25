@@ -82,9 +82,10 @@ pub fn use_target(target: Option<i32>, no_dps: bool, cooldown: i64) {
     match target {
         Some(t) => {
             if t > 2 {
-                click(LAST_ENEMY_HOTKEY);
-            }if no_dps && cooldown % 5 == 0{
-                click(LAST_ENEMY_HOTKEY);
+                click(Key::Escape);
+            }
+            if no_dps && cooldown % 5 == 0{
+                click(Key::Escape);
             }
         }
         None => {

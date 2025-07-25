@@ -41,7 +41,6 @@ pub fn use_movement(image: &Image, status: &mut Status) {
 	println!("{}", coords.len());
 	println!("{}", sanitized_coords.len());
 	if sanitized_coords.len() > 0 {
-		status.danger_count = 0;
 		let next = sanitized_coords.get(0).unwrap();
 		println!("{:?}", next);
 		let under_checkpoint = next.x == MAP_CENTER.x && ((next.y as i32 - MAP_CENTER.y as i32).abs() <=1);
@@ -63,13 +62,6 @@ pub fn use_movement(image: &Image, status: &mut Status) {
 			status.is_moving = true;
 		}
 	} else {
-		if status.danger_count < 20 {
-			status.danger_count = status.danger_count + 1;
-		}
-		if status.danger_count > 20 {
-			click(Key::Escape);
-			status.danger_count = 0;
-		}
 		status.next_waypoint = (status.next_waypoint + 1) % (WAYPOINTS.len() - 1);
 	}
 }
