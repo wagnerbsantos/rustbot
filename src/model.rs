@@ -40,9 +40,9 @@ pub struct Status {
     pub mana_pot_cooldown: bool,
     pub danger_count: u8,
     pub item_cooldown: bool,
-    pub big_mana_available : bool,
-    pub medium_mana_available : bool,
-    pub small_mana_available : bool,
+    pub big_mana_available: bool,
+    pub medium_mana_available: bool,
+    pub small_mana_available: bool,
     pub attack_cooldown: bool,
     pub no_dps: bool,
 }

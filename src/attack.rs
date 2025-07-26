@@ -1,7 +1,7 @@
 use crate::hotkey::click;
 use crate::model::{Color, Coord, Image, Status};
 use crate::screen::has_color_at_position;
-use enigo::{Key};
+use enigo::Key;
 
 pub const ENEMY_1_POS: Coord = Coord { x: 157, y: 62 };
 pub const ENEMY_1_ATTACK: Coord = Coord { x: 4, y: 49 };
@@ -55,9 +55,9 @@ pub fn use_attack(image: &Image, status: &mut Status) -> i32 {
 // fn check_weapon(image: &Image) {
 //     let has_no_weapon =
 //         has_color_at_position(image, &EMPTY_WEAPON_POSITION, &EMPTY_WEAPON_COLOR, false);
-//     let has_no_ranged_weapon = 
+//     let has_no_ranged_weapon =
 //         has_color_at_position(image, &NO_WEAPON_2_POSITION, &Color {r: 68, g: 68, b: 69}, false);
-//     let has_ranged_weapon_equiped = 
+//     let has_ranged_weapon_equiped =
 //         has_color_at_position(image, &WEAPON_2_EQUIPED_POSITION, &Color {r: 41, g: 41, b: 41}, false);
 //     if has_no_weapon {
 //             click(EQUIP_SWORD_HOTKEY);
@@ -73,7 +73,13 @@ pub fn loot() {
 }
 
 pub fn set_follow(image: &Image) {
-    if has_color_at_position(image, &FOLLOW_BUTTON, &FOLLOW_BUTTON_COLOR_DISABLED, false, false) { 
+    if has_color_at_position(
+        image,
+        &FOLLOW_BUTTON,
+        &FOLLOW_BUTTON_COLOR_DISABLED,
+        false,
+        false,
+    ) {
         click(Key::Layout('\\'));
     }
 }
@@ -84,7 +90,7 @@ pub fn use_target(target: Option<i32>, no_dps: bool, cooldown: i64) {
             if t > 2 {
                 click(Key::Escape);
             }
-            if no_dps && cooldown % 5 == 0{
+            if no_dps && cooldown % 5 == 0 {
                 click(Key::Escape);
             }
         }
