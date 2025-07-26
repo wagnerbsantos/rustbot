@@ -122,3 +122,8 @@ pub fn right_click(coord: &Coord) {
     sleep(Duration::from_millis(400));
     enigo.mouse_move_to(1748, 150);
 }
+
+pub fn left_click() {
+    let mut enigo = Enigo::new();
+    enigo.mouse_click(MouseButton::Left);
+}

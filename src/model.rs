@@ -37,8 +37,10 @@ pub struct Status {
     pub has_full_mantra: bool,
     pub is_monk: bool,
     pub healing_cooldown: bool,
+    pub heal_other_cooldown: bool,
     pub item_cooldown: bool,
     pub small_mana_available: bool,
     pub medium_mana_available: bool,
     pub big_mana_available: bool,
+    pub knight_lowlife: bool,
 }

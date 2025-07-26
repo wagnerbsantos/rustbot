@@ -1,10 +1,11 @@
 use captrs::*;
+use enigo::{Enigo, Key, MouseButton};
 use hotkey::{use_hotkeys, FOOD_TIMER};
 use model::*;
 use shuteye::sleep;
 use std::time::{Duration, Instant};
 
-use crate::{information::*, screen::*};
+use crate::{hotkey::click, information::*, movement::left_click, screen::*};
 
 mod attack;
 mod hotkey;
@@ -32,10 +33,12 @@ fn run_gameloop() {
         has_full_mantra: false,
         is_monk: true,
         healing_cooldown: false,
+        heal_other_cooldown: false,
         item_cooldown: false,
         small_mana_available: true,
         medium_mana_available: true,
         big_mana_available: true,
+        knight_lowlife: false,
     };
 
     loop {
@@ -173,17 +176,15 @@ fn run_gameloop() {
                         // 	sleep(Duration::from_millis(4000));
                     }
                 }
-                print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
+                //print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
                 println!("{:?}", &status);
             }
         }
 
         let elapsed = now.elapsed();
         println!("Elapsed: {:.2?}", elapsed);
-        if elapsed.as_millis() < 201 {
-            sleep(Duration::from_millis(201 - elapsed.as_millis() as u64));
-        } else {
-            sleep(Duration::from_millis(1000));
+        if elapsed.as_millis() < 100 {
+            sleep(Duration::from_millis(100 - elapsed.as_millis() as u64));
         }
         //break;
     }

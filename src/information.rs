@@ -17,16 +17,20 @@ pub fn use_image(image: &Image, mut status: Status) -> Status {
         false,
         false,
     );
+    status.heal_other_cooldown = get_item_on_cooldown_by_slot(image, 2);
     status.item_cooldown = get_item_on_cooldown_by_slot(image, 16);
     status.big_mana_available = get_item_available_by_slot(image, 15);
     status.medium_mana_available = get_item_available_by_slot(image, 16);
     status.small_mana_available = get_item_available_by_slot(image, 17);
+    status.knight_lowlife = get_ally_lowlife(image);
 
     status
 }
 
 pub fn should_continue(image: &Image) -> u8 {
-    if !has_color_at_position(image, ICON_SELECTED, ICON_SELECTED_COLOR, false, false) {
+    if !has_color_at_position(image, ICON_SELECTED, ICON_SELECTED_COLOR, false, false)
+        || !has_color_at_position(image, SCREEN_SELECTED, SCREEN_SELECTED_COLOR, false, false)
+    {
         println!("Tibia not selected");
         return 1;
     }
@@ -39,11 +43,11 @@ fn get_life(image: &Image) -> u8 {
         y: LIFE_BAR_START.y,
     };
     let mut life = 0;
-    for _ in 0..20 {
+    for _ in 0..22 {
         if has_color_at_position(image, &life_pos, LIFE_BAR_COLOR, false, true) {
             life = life + 1;
         }
-        life_pos.x = life_pos.x + 5;
+        life_pos.x = life_pos.x + 4;
     }
     return life;
 }
@@ -54,11 +58,11 @@ fn get_mana(image: &Image) -> u8 {
         y: MANA_BAR_START.y,
     };
     let mut mana = 0;
-    for _ in 0..20 {
+    for _ in 0..22 {
         if has_color_at_position(image, &mana_pos, MANA_BAR_COLOR, false, true) {
             mana = mana + 1;
         }
-        mana_pos.x = mana_pos.x + 5;
+        mana_pos.x = mana_pos.x + 4;
     }
     return mana;
 }
@@ -71,6 +75,12 @@ fn get_has_full_mantra(image: &Image) -> bool {
         b: 70,
     };
     return has_color_at_position(image, &mantra_pos, &mantra_color, false, false);
+}
+
+fn get_ally_lowlife(image: &Image) -> bool {
+    let ally_pos = Coord { x: 203, y: 64 };
+    let target_health_color = Color { r: 190, g: 0, b: 0 };
+    return has_greater_color_at_position(image, &ally_pos, &target_health_color);
 }
 
 fn get_has_cap(image: &Image) -> bool {

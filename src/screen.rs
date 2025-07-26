@@ -1,12 +1,12 @@
 use crate::model::{Area, Color, Coord, Image};
-pub const LIFE_BAR_START: &Coord = &Coord { x: 1768, y: 317 };
+pub const LIFE_BAR_START: &Coord = &Coord { x: 1768, y: 41 };
 pub const LIFE_BAR_COLOR: &Color = &Color {
     r: 219,
     g: 79,
     b: 79,
 };
 
-pub const MANA_BAR_START: &Coord = &Coord { x: 1768, y: 330 };
+pub const MANA_BAR_START: &Coord = &Coord { x: 1768, y: 54 };
 pub const MANA_BAR_COLOR: &Color = &Color {
     r: 83,
     g: 80,
@@ -37,12 +37,19 @@ pub const MAP_AREA: &Area = &Area {
 // MAP_Waypoints
 
 // OUTSIDE UI
-pub const ICON_SELECTED: &Coord = &Coord { x: 222, y: 1075 };
+pub const ICON_SELECTED: &Coord = &Coord { x: 10, y: 39 };
 pub const ICON_SELECTED_COLOR: &Color = &Color {
-    r: 81,
-    g: 81,
-    b: 81,
+    r: 173,
+    g: 173,
+    b: 173,
 };
+pub const SCREEN_SELECTED: &Coord = &Coord { x: 1894, y: 15 };
+pub const SCREEN_SELECTED_COLOR: &Color = &Color {
+    r: 35,
+    g: 159,
+    b: 222,
+};
+
 pub const LOGIN_SCREEN: &Coord = &Coord { x: 582, y: 40 };
 pub const LOGIN_SCREEN_COLOR: &Color = &Color {
     r: 255,
@@ -111,8 +118,8 @@ pub fn has_color_at_position(
     isprint: bool,
     is_buggy: bool,
 ) -> bool {
-    let result = &get_color_at_position(image, position, isprint);
-    result == color || (result == BUG_COLOR && is_buggy)
+    let result = get_color_at_position(image, position, isprint);
+    result == *color || ((result.r <= 6 || result.b <= 6 || result.g <= 6) && is_buggy)
 }
 
 pub fn get_color_positions_in_area(
