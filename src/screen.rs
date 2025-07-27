@@ -1,12 +1,12 @@
 use crate::model::{Area, Color, Coord, Image};
-pub const LIFE_BAR_START: &Coord = &Coord { x: 1768, y: 317 };
+pub const LIFE_BAR_START: &Coord = &Coord { x: 1768, y: 41 };
 pub const LIFE_BAR_COLOR: &Color = &Color {
     r: 219,
     g: 79,
     b: 79,
 };
 
-pub const MANA_BAR_START: &Coord = &Coord { x: 1768, y: 330 };
+pub const MANA_BAR_START: &Coord = &Coord { x: 1768, y: 54 };
 pub const MANA_BAR_COLOR: &Color = &Color {
     r: 83,
     g: 80,
@@ -30,8 +30,8 @@ pub const MANA_POT_COOLDOWN_COLOR: &Color = &Color {
 
 //MAP
 pub const MAP_AREA: &Area = &Area {
-    top_left: Coord { x: 1753, y: 38 },
-    bot_right: Coord { x: 1857, y: 144 },
+    top_left: Coord { x: 1753, y: 65 },
+    bot_right: Coord { x: 1858, y: 173 },
 };
 
 // MAP_Waypoints
