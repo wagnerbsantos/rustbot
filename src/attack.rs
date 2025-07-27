@@ -8,7 +8,7 @@ pub const ENEMY_1_ATTACK: Coord = Coord { x: 4, y: 49 };
 pub const ENEMY_OFFSET: u32 = 22;
 pub const ENEMY_BAR_COLOR: Color = Color { r: 0, g: 0, b: 0 };
 pub const ENEMY_ATTACK_COLOR: Color = Color { r: 255, g: 0, b: 0 };
-pub const FOLLOW_BUTTON: Coord = Coord { x: 1902, y: 182 };
+pub const FOLLOW_BUTTON: Coord = Coord { x: 1901, y: 211 };
 // pub const EMPTY_WEAPON_POSITION: Coord = Coord { x: 1760, y: 227 };
 // pub const NO_WEAPON_2_POSITION: Coord = Coord { x: 1535, y: 286 };
 // pub const WEAPON_2_EQUIPED_POSITION: Coord = Coord { x: 1534, y: 285 };
@@ -32,6 +32,7 @@ pub const NEXT_ENEMY_HOTKEY: Key = Key::Layout('e');
 pub fn use_attack(image: &Image, status: &mut Status) -> i32 {
     // check_weapon(image);
     let enemy_count = count_enemies(image);
+    status.number_enemies = enemy_count;
     if enemy_count > 0 {
         let target = get_attacker(image, enemy_count);
         if status.is_attacking && target.is_none() {
@@ -80,7 +81,7 @@ pub fn set_follow(image: &Image) {
         false,
         false,
     ) {
-        click(Key::Layout('\\'));
+        click(Key::End);
     }
 }
 

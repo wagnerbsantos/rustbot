@@ -44,5 +44,8 @@ pub struct Status {
     pub medium_mana_available: bool,
     pub small_mana_available: bool,
     pub attack_cooldown: bool,
+    pub aoe_cooldown: bool,
+    pub general_attack_cooldown: bool,
     pub no_dps: bool,
+    pub number_enemies: i32,
 }

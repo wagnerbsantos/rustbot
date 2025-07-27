@@ -17,11 +17,19 @@ pub fn use_image(image: &Image, mut status: Status) -> Status {
         false,
         false,
     );
+    status.general_attack_cooldown = has_color_at_position(
+        image,
+        GENERAL_ATTACK_POS,
+        HEALING_COOLDOWN_COLOR,
+        false,
+        false,
+    );
     status.item_cooldown = get_item_on_cooldown_by_slot(image, 16);
     status.big_mana_available = get_item_available_by_slot(image, 15);
     status.medium_mana_available = get_item_available_by_slot(image, 16);
     status.small_mana_available = get_item_available_by_slot(image, 17);
     status.attack_cooldown = get_item_on_cooldown_by_slot(image, 3);
+    status.aoe_cooldown = get_item_on_cooldown_by_slot(image, 4);
     status.no_dps = has_color_at_position(
         image,
         &Coord { x: 149, y: 469 },
@@ -76,7 +84,7 @@ fn get_mana(image: &Image) -> u8 {
 }
 
 fn get_has_full_mantra(image: &Image) -> bool {
-    let mantra_pos = Coord { x: 1029, y: 77 };
+    let mantra_pos = Coord { x: 1091, y: 77 };
     let mantra_color = Color {
         r: 219,
         g: 154,

@@ -15,7 +15,7 @@ pub const WAYPOINTS: [Color; 7] = [
     WAYPOINT_MONEY,
 ];
 
-pub const MAP_CENTER: Coord = Coord { x: 1806, y: 90 };
+pub const MAP_CENTER: Coord = Coord { x: 1806, y: 120 };
 pub const WAYPOINT_OFFSET: u32 = 5;
 pub const WAYPOINT_BORDER_COLOR: Color = Color {
     r: 70,
@@ -24,12 +24,18 @@ pub const WAYPOINT_BORDER_COLOR: Color = Color {
 };
 
 pub fn use_movement(image: &Image, status: &mut Status) {
-    let coords = get_color_positions_in_area(
-        image,
-        MAP_AREA,
-        WAYPOINTS.get(status.next_waypoint).unwrap(),
-        false,
-    );
+    let mut coords = Vec::new();
+    if !status.small_mana_available && !status.medium_mana_available {
+        coords = get_color_positions_in_area(image, MAP_AREA, &WAYPOINT_CROSS, false);
+    }
+    if coords.len() == 0 {
+        coords = get_color_positions_in_area(
+            image,
+            MAP_AREA,
+            WAYPOINTS.get(status.next_waypoint).unwrap(),
+            false,
+        );
+    }
     let sanitized_coords: Vec<Coord> = coords
         .iter()
         .filter_map(|coord| {
@@ -81,7 +87,6 @@ pub fn use_movement(image: &Image, status: &mut Status) {
         .collect();
     if sanitized_coords.len() > 0 {
         let next = sanitized_coords.get(0).unwrap();
-        println!("{:?}", next);
         let under_checkpoint =
             next.x == MAP_CENTER.x && ((next.y as i32 - MAP_CENTER.y as i32).abs() <= 1);
 

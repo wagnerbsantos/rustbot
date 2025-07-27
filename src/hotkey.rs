@@ -8,6 +8,7 @@ pub const FOOD_TIMER: i64 = 300;
 
 //HOTKEYS
 pub const WASTE_MANA_HOTKEY: Key = Key::PageUp;
+pub const AOE_ATTACK_HOTKEY: Key = Key::Home;
 pub const MANTRA_SKILL_HOTKEY: Key = Key::PageDown;
 pub const SMALL_HEAL_HOTKEY: Key = Key::F1;
 pub const HEAL_HOTKEY: Key = Key::F2;
@@ -57,7 +58,6 @@ pub fn use_general_hotkeys(status: &Status) {
         }
     }
     if !status.healing_cooldown && done == 0 {
-        // monk
         if status.life <= 13 && done == 0 {
             click(BIG_HEAL_HOTKEY);
             done = 1;
@@ -75,29 +75,12 @@ pub fn use_general_hotkeys(status: &Status) {
         click(FOOD_HOTKEY);
         done = 1;
     }
-    if !status.healing_cooldown && done == 0 {
-        // monk
-        if status.life <= 13 && done == 0 {
-            click(BIG_HEAL_HOTKEY);
-            done = 1;
-        }
-        if status.life <= 15 && done == 0 {
-            click(HEAL_HOTKEY);
-            done = 1;
-        }
-        if status.life <= 16 && done == 0 {
-            click(SMALL_HEAL_HOTKEY);
-            done = 1;
-        }
-    }
-    if status.food_timer <= 0 && done == 0 {
-        click(FOOD_HOTKEY);
-        done = 1;
-    }
-    if status.life <= 17 && status.is_attacking && !status.attack_cooldown {
+    if status.life <= 17 && status.is_attacking && !status.general_attack_cooldown {
         if status.has_full_mantra {
             click(MANTRA_SKILL_HOTKEY);
-        } else {
+        } else if status.number_enemies >= 4 && !status.aoe_cooldown {
+            click(AOE_ATTACK_HOTKEY);
+        } else if !status.attack_cooldown {
             click(WASTE_MANA_HOTKEY); // attack
         }
     }

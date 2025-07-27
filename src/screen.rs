@@ -15,6 +15,7 @@ pub const MANA_BAR_COLOR: &Color = &Color {
 pub const BUG_COLOR: &Color = &Color { r: 0, g: 0, b: 0 };
 
 pub const HEALING_COOLDOWN_POS: &Coord = &Coord { x: 381, y: 945 };
+pub const GENERAL_ATTACK_POS: &Coord = &Coord { x: 357, y: 945 };
 pub const HEALING_COOLDOWN_COLOR: &Color = &Color {
     r: 255,
     g: 255,

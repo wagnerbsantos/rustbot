@@ -2,6 +2,8 @@ use captrs::*;
 use hotkey::{use_hotkeys, FOOD_TIMER};
 use model::*;
 use shuteye::sleep;
+use std::fs::File;
+use std::io::BufReader;
 use std::time::{Duration, Instant};
 
 use crate::attack::use_attack;
@@ -12,7 +14,6 @@ use rodio::Source;
 
 mod attack;
 mod hotkey;
-mod information;
 mod information;
 mod model;
 mod movement;
@@ -44,7 +45,10 @@ fn run_gameloop() {
         item_cooldown: false,
         small_mana_available: false,
         attack_cooldown: false,
+        general_attack_cooldown: false,
+        aoe_cooldown: false,
         no_dps: false,
+        number_enemies: 0,
     };
     loop {
         let now = Instant::now();
@@ -78,6 +82,7 @@ fn run_gameloop() {
                         if enemy_count == 0 {
                             use_movement(&image, &mut status);
                         }
+                        println!("{:?}", status);
                     }
                     1 => {
                         if has_color_at_position(
@@ -87,12 +92,12 @@ fn run_gameloop() {
                             false,
                             false,
                         ) {
-                            let mut enigo = Enigo::new();
-                            enigo.mouse_move_to(
-                                ICON_SELECTED.x.try_into().unwrap(),
-                                ICON_SELECTED.y.try_into().unwrap(),
-                            );
-                            enigo.mouse_click(MouseButton::Left);
+                            // let mut enigo = Enigo::new();
+                            // enigo.mouse_move_to(
+                            //     ICON_SELECTED.x.try_into().unwrap(),
+                            //     ICON_SELECTED.y.try_into().unwrap(),
+                            // );
+                            // enigo.mouse_click(MouseButton::Left);
                         } else {
                             //run_tibia();
                         }
