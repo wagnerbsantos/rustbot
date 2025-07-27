@@ -7,6 +7,7 @@ use std::io::BufReader;
 use std::time::{Duration, Instant};
 
 use crate::attack::use_attack;
+use crate::hotkey::click;
 use crate::movement::use_movement;
 use crate::{information::*, screen::*};
 use enigo::*;
@@ -74,8 +75,9 @@ fn run_gameloop() {
                     0 => {
                         status = use_image(&image, status);
                         use_hotkeys(&status);
-                        if (!status.has_cap && status.food_timer <= 0) || status.life <= 1 {
-                            play_audio();
+                        if status.food_timer <= 0 {
+                            click(Key::F8);
+                            status.food_timer = FOOD_TIMER;
                         }
                         let enemy_count = use_attack(&image, &mut status);
                         sleep(Duration::from_millis(200));
@@ -190,10 +192,8 @@ fn run_gameloop() {
 
         let elapsed = now.elapsed();
         println!("Elapsed: {:.2?}", elapsed);
-        if elapsed.as_millis() < 1000 {
-            sleep(Duration::from_millis(1000 - elapsed.as_millis() as u64));
-        } else {
-            sleep(Duration::from_millis(520));
+        if elapsed.as_millis() < 250 {
+            sleep(Duration::from_millis(250 - elapsed.as_millis() as u64));
         }
         //break;
     }

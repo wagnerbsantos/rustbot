@@ -78,7 +78,7 @@ pub fn use_general_hotkeys(status: &Status) {
     if status.life <= 17 && status.is_attacking && !status.general_attack_cooldown {
         if status.has_full_mantra {
             click(MANTRA_SKILL_HOTKEY);
-        } else if status.number_enemies >= 4 && !status.aoe_cooldown {
+        } else if status.number_enemies >= 3 && !status.aoe_cooldown {
             click(AOE_ATTACK_HOTKEY);
         } else if !status.attack_cooldown {
             click(WASTE_MANA_HOTKEY); // attack
