@@ -38,12 +38,19 @@ pub const MAP_AREA: &Area = &Area {
 // MAP_Waypoints
 
 // OUTSIDE UI
-pub const ICON_SELECTED: &Coord = &Coord { x: 222, y: 1075 };
+pub const ICON_SELECTED: &Coord = &Coord { x: 10, y: 39 };
 pub const ICON_SELECTED_COLOR: &Color = &Color {
-    r: 81,
-    g: 81,
-    b: 81,
+    r: 173,
+    g: 173,
+    b: 173,
 };
+pub const SCREEN_SELECTED: &Coord = &Coord { x: 1894, y: 15 };
+pub const SCREEN_SELECTED_COLOR: &Color = &Color {
+    r: 35,
+    g: 159,
+    b: 222,
+};
+
 pub const LOGIN_SCREEN: &Coord = &Coord { x: 582, y: 40 };
 pub const LOGIN_SCREEN_COLOR: &Color = &Color {
     r: 255,
