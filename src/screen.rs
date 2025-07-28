@@ -126,8 +126,8 @@ pub fn has_color_at_position(
     isprint: bool,
     is_buggy: bool,
 ) -> bool {
-    let result = &get_color_at_position(image, position, isprint);
-    result == color || (result == BUG_COLOR && is_buggy)
+    let result = get_color_at_position(image, position, isprint);
+    result == *color || ((result.r <= 6 || result.b <= 6 || result.g <= 6) && is_buggy)
 }
 
 pub fn get_color_positions_in_area(
