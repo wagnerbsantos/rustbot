@@ -50,6 +50,8 @@ fn run_gameloop() {
         aoe_cooldown: false,
         no_dps: false,
         number_enemies: 0,
+        knight_lowlife: false,
+        heal_other_cooldown: false,
     };
     loop {
         let now = Instant::now();

@@ -7,7 +7,7 @@ use shuteye::sleep;
 pub const FOOD_TIMER: i64 = 300;
 
 //HOTKEYS
-pub const WASTE_MANA_HOTKEY: Key = Key::PageUp;
+pub const WASTE_MANA_HOTKEY: Key = Key::Delete;
 pub const AOE_ATTACK_HOTKEY: Key = Key::Home;
 pub const MANTRA_SKILL_HOTKEY: Key = Key::PageDown;
 pub const SMALL_HEAL_HOTKEY: Key = Key::F1;
@@ -17,6 +17,7 @@ pub const BIG_MANA_HOTKEY: Key = Key::F5;
 pub const MEDIUM_MANA_HOTKEY: Key = Key::F6;
 pub const SMALL_MANA_HOTKEY: Key = Key::F7;
 pub const FOOD_HOTKEY: Key = Key::F8;
+pub const HEAL_OTHER_HOTKEY: Key = Key::PageUp;
 
 pub fn use_hotkeys(status: &Status) {
     use_general_hotkeys(status);

@@ -48,4 +48,6 @@ pub struct Status {
     pub general_attack_cooldown: bool,
     pub no_dps: bool,
     pub number_enemies: i32,
+    pub knight_lowlife: bool,
+    pub heal_other_cooldown: bool,
 }
