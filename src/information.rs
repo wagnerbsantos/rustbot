@@ -41,6 +41,8 @@ pub fn use_image(image: &Image, mut status: Status) -> Status {
         false,
         true,
     );
+    status.knight_lowlife = get_ally_lowlife(image);
+    status.heal_other_cooldown = get_item_on_cooldown_by_slot(image, 2);
 
     status
 }
