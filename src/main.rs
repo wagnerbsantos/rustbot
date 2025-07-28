@@ -52,6 +52,7 @@ fn run_gameloop() {
         number_enemies: 0,
         knight_lowlife: false,
         heal_other_cooldown: false,
+        auto_hunt: false,
     };
     loop {
         let now = Instant::now();
@@ -81,10 +82,11 @@ fn run_gameloop() {
                             click(Key::F8);
                             status.food_timer = FOOD_TIMER;
                         }
-                        let enemy_count = use_attack(&image, &mut status);
-                        sleep(Duration::from_millis(200));
-                        if enemy_count == 0 {
-                            use_movement(&image, &mut status);
+                        if status.ladder_cooldown % 8 == 0 && status.auto_hunt {
+                            let enemy_count = use_attack(&image, &mut status);
+                            if enemy_count == 0 {
+                                use_movement(&image, &mut status);
+                            }
                         }
                         println!("{:?}", status);
                     }
@@ -194,8 +196,8 @@ fn run_gameloop() {
 
         let elapsed = now.elapsed();
         println!("Elapsed: {:.2?}", elapsed);
-        if elapsed.as_millis() < 250 {
-            sleep(Duration::from_millis(250 - elapsed.as_millis() as u64));
+        if elapsed.as_millis() < 125 {
+            sleep(Duration::from_millis(125 - elapsed.as_millis() as u64));
         }
         //break;
     }

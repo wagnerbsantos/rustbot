@@ -29,6 +29,13 @@ pub const MANA_POT_COOLDOWN_COLOR: &Color = &Color {
     b: 223,
 };
 
+pub const AUTO_HUNT_POS: &Coord = &Coord { x: 1900, y: 234 };
+pub const AUTO_HUNT_COLOR: &Color = &Color {
+    r: 188,
+    g: 188,
+    b: 188,
+};
+
 //MAP
 pub const MAP_AREA: &Area = &Area {
     top_left: Coord { x: 1753, y: 65 },

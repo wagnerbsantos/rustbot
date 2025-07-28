@@ -50,4 +50,5 @@ pub struct Status {
     pub number_enemies: i32,
     pub knight_lowlife: bool,
     pub heal_other_cooldown: bool,
+    pub auto_hunt: bool,
 }
