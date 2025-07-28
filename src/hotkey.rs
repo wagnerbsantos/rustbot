@@ -78,10 +78,11 @@ pub fn use_general_hotkeys(status: &Status) {
         }
     }
 
-    if status.food_timer == 0 && done == 0 {
-        click(FOOD_HOTKEY);
-    }
-    if status.life <= 21 && status.is_attacking && !status.general_attack_cooldown {
+    if status.life <= 21
+        && status.is_attacking
+        && !status.general_attack_cooldown
+        && status.ladder_cooldown % 4 == 0
+    {
         if status.has_full_mantra {
             click(MANTRA_SKILL_HOTKEY);
         } else if status.number_enemies >= 3 && !status.aoe_cooldown {

@@ -1,7 +1,10 @@
+use std::time::Duration;
+
 use crate::hotkey::click;
 use crate::model::{Color, Coord, Image, Status};
 use crate::screen::has_color_at_position;
 use enigo::Key;
+use shuteye::sleep;
 
 pub const ENEMY_1_POS: Coord = Coord { x: 157, y: 62 };
 pub const ENEMY_1_ATTACK: Coord = Coord { x: 4, y: 49 };
@@ -43,11 +46,13 @@ pub fn use_attack(image: &Image, status: &mut Status) -> i32 {
         set_follow(image);
         status.is_attacking = true;
         loot();
+        sleep(Duration::from_millis(125 as u64));
     } else {
         if status.is_attacking == true {
             status.is_attacking = false;
             status.is_moving = false;
             loot();
+            sleep(Duration::from_millis(125 as u64));
         }
     }
     enemy_count

@@ -6,7 +6,7 @@ use std::fs::File;
 use std::io::BufReader;
 use std::time::{Duration, Instant};
 
-use crate::attack::use_attack;
+use crate::attack::{loot, use_attack};
 use crate::hotkey::click;
 use crate::movement::use_movement;
 use crate::{information::*, screen::*};
@@ -37,10 +37,7 @@ fn run_gameloop() {
         has_cap: true,
         ladder_cooldown: 10,
         has_full_mantra: false,
-        is_monk: true,
         healing_cooldown: false,
-        mana_pot_cooldown: false,
-        danger_count: 0,
         big_mana_available: false,
         medium_mana_available: false,
         item_cooldown: false,
@@ -85,6 +82,8 @@ fn run_gameloop() {
                         if status.ladder_cooldown % 8 == 0 && status.auto_hunt {
                             let enemy_count = use_attack(&image, &mut status);
                             if enemy_count == 0 {
+                                loot();
+                                sleep(Duration::from_millis(250 as u64));
                                 use_movement(&image, &mut status);
                             }
                         }
