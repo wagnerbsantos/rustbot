@@ -82,6 +82,7 @@ pub fn use_general_hotkeys(status: &Status) {
         && status.is_attacking
         && !status.general_attack_cooldown
         && status.ladder_cooldown % 4 == 0
+        && status.auto_hunt
     {
         if status.has_full_mantra {
             click(MANTRA_SKILL_HOTKEY);
