@@ -43,7 +43,8 @@ pub fn use_image(image: &Image, mut status: Status) -> Status {
     );
     status.knight_lowlife = get_ally_lowlife(image);
     status.heal_other_cooldown = get_item_on_cooldown_by_slot(image, 2);
-    status.auto_hunt = has_color_at_position(image, &AUTO_HUNT_POS, &AUTO_HUNT_COLOR, false, false);
+    status.auto_hunt =
+        !has_color_at_position(image, &AUTO_HUNT_POS, &AUTO_HUNT_COLOR, false, false);
 
     status
 }
@@ -89,7 +90,7 @@ fn get_mana(image: &Image) -> u8 {
 }
 
 fn get_has_full_mantra(image: &Image) -> bool {
-    let mantra_pos = Coord { x: 1029, y: 77 };
+    let mantra_pos = Coord { x: 1091, y: 77 };
     let mantra_color = Color {
         r: 219,
         g: 154,
