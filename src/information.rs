@@ -1,3 +1,5 @@
+use std::io::stdin;
+
 use crate::{model::*, screen::*};
 
 pub fn use_image(image: &Image, mut status: Status) -> Status {
@@ -44,8 +46,7 @@ pub fn use_image(image: &Image, mut status: Status) -> Status {
     status.knight_lowlife = get_ally_lowlife(image);
     status.heal_other_cooldown = get_item_on_cooldown_by_slot(image, 2);
     status.auto_hunt =
-        !has_color_at_position(image, &AUTO_HUNT_POS, &AUTO_HUNT_COLOR, false, false);
-
+        !has_color_at_position(image, &AUTO_HUNT_POS, &AUTO_HUNT_COLOR, true, true);
     status
 }
 
@@ -100,9 +101,16 @@ fn get_has_full_mantra(image: &Image) -> bool {
 }
 
 fn get_ally_lowlife(image: &Image) -> bool {
-    let ally_pos = Coord { x: 203, y: 64 };
-    let target_health_color = Color { r: 190, g: 0, b: 0 };
-    return has_greater_color_at_position(image, &ally_pos, &target_health_color);
+    let ally_pos = Coord { x: 295, y: 64 };
+    let target_red_color = Color { r: 91, g: 0, b: 0 };
+    let target_green_color = Color { r: 0, g: 91, b: 0 };
+    let target_blue_color = Color { r: 0, g: 0, b: 91 };
+    let target_exist_pos = Coord{ x: 202, y: 62};
+    let target_exist_color = Color { r: 0, g: 0, b: 0 };
+    return !(has_greater_color_at_position(image, &ally_pos, &target_red_color) ||
+        has_greater_color_at_position(image, &ally_pos, &target_green_color) || 
+        has_greater_color_at_position(image, &ally_pos, &target_blue_color)) &&
+         has_color_at_position(image, &target_exist_pos, &target_exist_color, false, true);
 }
 
 fn get_has_cap(image: &Image) -> bool {

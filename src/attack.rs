@@ -93,11 +93,8 @@ pub fn set_follow(image: &Image) {
 pub fn use_target(target: Option<i32>, no_dps: bool, cooldown: i64) {
     match target {
         Some(t) => {
-            if t > 2 {
-                click(Key::Escape);
-            }
-            if no_dps && cooldown % 5 == 0 {
-                click(Key::Escape);
+            if t > 1 {
+                click(NEXT_ENEMY_HOTKEY);
             }
         }
         None => {

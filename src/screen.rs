@@ -51,10 +51,10 @@ pub const ICON_SELECTED_COLOR: &Color = &Color {
     g: 173,
     b: 173,
 };
-pub const SCREEN_SELECTED: &Coord = &Coord { x: 1894, y: 15 };
+pub const SCREEN_SELECTED: &Coord = &Coord { x: 1900, y: 15 };
 pub const SCREEN_SELECTED_COLOR: &Color = &Color {
-    r: 35,
-    g: 159,
+    r: 31,
+    g: 158,
     b: 222,
 };
 
@@ -127,7 +127,7 @@ pub fn has_color_at_position(
     is_buggy: bool,
 ) -> bool {
     let result = get_color_at_position(image, position, isprint);
-    result == *color || ((result.r <= 6 || result.b <= 6 || result.g <= 6) && is_buggy)
+    result == *color || ((result.r as i32 == result.g as i32 -1 || result.g as i32 == result.b as i32 -4 ) && is_buggy)
 }
 
 pub fn get_color_positions_in_area(
