@@ -30,8 +30,9 @@ pub fn use_image(image: &Image, mut status: Status) -> Status {
     status.big_mana_available = get_item_available_by_slot(image, 15);
     status.medium_mana_available = get_item_available_by_slot(image, 16);
     status.small_mana_available = get_item_available_by_slot(image, 17);
-    status.attack_cooldown = get_item_on_cooldown_by_slot(image, 3);
-    status.aoe_cooldown = get_item_on_cooldown_by_slot(image, 4);
+    status.attack_cooldown = get_item_on_cooldown_by_slot(image, 3) || !get_item_available_by_slot(image, 3);
+    status.aoe_cooldown = get_item_on_cooldown_by_slot(image, 4) || !get_item_available_by_slot(image, 4);
+    status.mantra_cooldown = get_item_on_cooldown_by_slot(image, 5) || !get_item_available_by_slot(image, 5);
     status.no_dps = has_color_at_position(
         image,
         &Coord { x: 149, y: 469 },
@@ -44,7 +45,7 @@ pub fn use_image(image: &Image, mut status: Status) -> Status {
         true,
     );
     status.knight_lowlife = get_ally_lowlife(image);
-    status.heal_other_cooldown = get_item_on_cooldown_by_slot(image, 2);
+    status.heal_other_cooldown = get_item_on_cooldown_by_slot(image, 2) || !get_item_available_by_slot(image, 2);
     status.auto_hunt =
         !has_color_at_position(image, &AUTO_HUNT_POS, &AUTO_HUNT_COLOR, true, true);
     status
@@ -110,7 +111,7 @@ fn get_ally_lowlife(image: &Image) -> bool {
     return !(has_greater_color_at_position(image, &ally_pos, &target_red_color) ||
         has_greater_color_at_position(image, &ally_pos, &target_green_color) || 
         has_greater_color_at_position(image, &ally_pos, &target_blue_color)) &&
-         has_color_at_position(image, &target_exist_pos, &target_exist_color, false, true);
+         has_color_at_position(image, &target_exist_pos, &target_exist_color, true, false);
 }
 
 fn get_has_cap(image: &Image) -> bool {

@@ -45,6 +45,7 @@ fn run_gameloop() {
         attack_cooldown: false,
         general_attack_cooldown: false,
         aoe_cooldown: false,
+        mantra_cooldown: false,
         no_dps: false,
         number_enemies: 0,
         knight_lowlife: false,

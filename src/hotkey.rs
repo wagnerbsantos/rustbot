@@ -83,7 +83,7 @@ pub fn use_general_hotkeys(status: &Status) {
         && status.ladder_cooldown % 4 == 0
         && status.auto_hunt
     {
-        if status.has_full_mantra {
+        if status.has_full_mantra && !status.mantra_cooldown{
             click(MANTRA_SKILL_HOTKEY);
         } else if status.number_enemies >= 3 && !status.aoe_cooldown {
             click(AOE_ATTACK_HOTKEY);
