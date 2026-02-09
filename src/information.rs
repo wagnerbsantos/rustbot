@@ -19,6 +19,12 @@ pub fn use_image(image: &Image, mut status: Status) -> Status {
         false,
         false,
     );
+    status.healing_1_cooldown =
+        get_item_on_cooldown_by_slot(image, 11) || !get_item_available_by_slot(image, 11);
+    status.healing_2_cooldown =
+        get_item_on_cooldown_by_slot(image, 12) || !get_item_available_by_slot(image, 12);
+    status.healing_3_cooldown =
+        get_item_on_cooldown_by_slot(image, 13) || !get_item_available_by_slot(image, 13);
     status.general_attack_cooldown = has_color_at_position(
         image,
         GENERAL_ATTACK_POS,
@@ -30,9 +36,12 @@ pub fn use_image(image: &Image, mut status: Status) -> Status {
     status.big_mana_available = get_item_available_by_slot(image, 15);
     status.medium_mana_available = get_item_available_by_slot(image, 16);
     status.small_mana_available = get_item_available_by_slot(image, 17);
-    status.attack_cooldown = get_item_on_cooldown_by_slot(image, 3) || !get_item_available_by_slot(image, 3);
-    status.aoe_cooldown = get_item_on_cooldown_by_slot(image, 4) || !get_item_available_by_slot(image, 4);
-    status.mantra_cooldown = get_item_on_cooldown_by_slot(image, 5) || !get_item_available_by_slot(image, 5);
+    status.attack_cooldown =
+        get_item_on_cooldown_by_slot(image, 3) || !get_item_available_by_slot(image, 3);
+    status.aoe_cooldown =
+        get_item_on_cooldown_by_slot(image, 4) || !get_item_available_by_slot(image, 4);
+    status.mantra_cooldown =
+        get_item_on_cooldown_by_slot(image, 5) || !get_item_available_by_slot(image, 5);
     status.no_dps = has_color_at_position(
         image,
         &Coord { x: 149, y: 469 },
@@ -44,10 +53,17 @@ pub fn use_image(image: &Image, mut status: Status) -> Status {
         false,
         true,
     );
-    status.knight_lowlife = get_ally_lowlife(image);
-    status.heal_other_cooldown = get_item_on_cooldown_by_slot(image, 2) || !get_item_available_by_slot(image, 2);
-    status.auto_hunt =
-        !has_color_at_position(image, &AUTO_HUNT_POS, &AUTO_HUNT_COLOR, true, true);
+    status.player_detected = get_has_player(image);
+    status.knight_lowlife = status.player_detected && get_ally_lowlife(image);
+    status.heal_other_cooldown =
+        get_item_on_cooldown_by_slot(image, 2) || !get_item_available_by_slot(image, 2);
+    let past_auto_hunt = status.auto_hunt;
+    status.auto_hunt = !has_color_at_position(image, &AUTO_HUNT_POS, &AUTO_HUNT_COLOR, true, true);
+    if status.auto_hunt && !past_auto_hunt {
+        status.should_evacuate = false;
+    } else if status.auto_hunt && status.player_detected {
+        status.should_evacuate = true;
+    }
     status
 }
 
@@ -101,17 +117,20 @@ fn get_has_full_mantra(image: &Image) -> bool {
     return has_color_at_position(image, &mantra_pos, &mantra_color, false, false);
 }
 
+fn get_has_player(image: &Image) -> bool {
+    let target_exist_pos = Coord { x: 202, y: 62 };
+    let target_exist_color = Color { r: 0, g: 0, b: 0 };
+    return has_color_at_position(image, &target_exist_pos, &target_exist_color, true, false);
+}
+
 fn get_ally_lowlife(image: &Image) -> bool {
     let ally_pos = Coord { x: 295, y: 64 };
     let target_red_color = Color { r: 91, g: 0, b: 0 };
     let target_green_color = Color { r: 0, g: 91, b: 0 };
     let target_blue_color = Color { r: 0, g: 0, b: 91 };
-    let target_exist_pos = Coord{ x: 202, y: 62};
-    let target_exist_color = Color { r: 0, g: 0, b: 0 };
-    return !(has_greater_color_at_position(image, &ally_pos, &target_red_color) ||
-        has_greater_color_at_position(image, &ally_pos, &target_green_color) || 
-        has_greater_color_at_position(image, &ally_pos, &target_blue_color)) &&
-         has_color_at_position(image, &target_exist_pos, &target_exist_color, true, false);
+    return !(has_greater_color_at_position(image, &ally_pos, &target_red_color)
+        || has_greater_color_at_position(image, &ally_pos, &target_green_color)
+        || has_greater_color_at_position(image, &ally_pos, &target_blue_color));
 }
 
 fn get_has_cap(image: &Image) -> bool {

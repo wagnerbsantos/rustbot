@@ -60,7 +60,7 @@ pub fn use_general_hotkeys(status: &Status) {
     }
     if !status.healing_cooldown && done == 0 {
         // monk
-        if status.life <= 18 && done == 0 {
+        if status.life <= 18 && done == 0 && !status.healing_3_cooldown {
             click(BIG_HEAL_HOTKEY);
             done = 1;
         }
@@ -68,11 +68,11 @@ pub fn use_general_hotkeys(status: &Status) {
             click(HEAL_OTHER_HOTKEY);
             done = 1;
         }
-        if status.life <= 19 && done == 0 {
+        if status.life <= 19 && done == 0 && !status.healing_2_cooldown {
             click(HEAL_HOTKEY);
             done = 1;
         }
-        if status.life <= 20 && done == 0 {
+        if status.life <= 20 && done == 0 && !status.healing_1_cooldown {
             click(SMALL_HEAL_HOTKEY);
             done = 1;
         }
@@ -82,8 +82,9 @@ pub fn use_general_hotkeys(status: &Status) {
         && !status.general_attack_cooldown
         && status.ladder_cooldown % 4 == 0
         && status.auto_hunt
+        && status.mana > 10
     {
-        if status.has_full_mantra && !status.mantra_cooldown{
+        if status.has_full_mantra && !status.mantra_cooldown {
             click(MANTRA_SKILL_HOTKEY);
         } else if status.number_enemies >= 3 && !status.aoe_cooldown {
             click(AOE_ATTACK_HOTKEY);

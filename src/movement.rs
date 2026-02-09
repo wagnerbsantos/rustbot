@@ -25,7 +25,7 @@ pub const WAYPOINT_BORDER_COLOR: Color = Color {
 
 pub fn use_movement(image: &Image, status: &mut Status) {
     let mut coords = Vec::new();
-    if !status.small_mana_available && !status.medium_mana_available {
+    if (!status.small_mana_available && !status.medium_mana_available) || status.should_evacuate {
         coords = get_color_positions_in_area(image, MAP_AREA, &WAYPOINT_CROSS, false);
     }
     if coords.len() == 0 {

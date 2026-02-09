@@ -38,6 +38,9 @@ fn run_gameloop() {
         ladder_cooldown: 10,
         has_full_mantra: false,
         healing_cooldown: false,
+        healing_1_cooldown: false,
+        healing_2_cooldown: false,
+        healing_3_cooldown: false,
         big_mana_available: false,
         medium_mana_available: false,
         item_cooldown: false,
@@ -51,6 +54,8 @@ fn run_gameloop() {
         knight_lowlife: false,
         heal_other_cooldown: false,
         auto_hunt: false,
+        should_evacuate: false,
+        player_detected: false,
     };
     loop {
         let now = Instant::now();
