@@ -1,3 +1,4 @@
+use crate::hotkey::click;
 use crate::model::{Color, Coord, Image, Status};
 use crate::screen::{get_color_positions_in_area, has_color_at_position, MAP_AREA};
 use crate::waypoints::*;
@@ -94,9 +95,11 @@ pub fn use_movement(image: &Image, status: &mut Status) {
             status.next_waypoint = (status.next_waypoint + 1) % (WAYPOINTS.len() - 1);
             status.move_timer = 2;
             if status.ladder_cooldown <= 0 && under_checkpoint {
-                right_click(&Coord { x: 950, y: 480 });
-                status.ladder_cooldown = 3;
+                click(enigo::Key::F11);
                 sleep(Duration::from_millis(150));
+                right_click(&Coord { x: 950, y: 480 });
+                sleep(Duration::from_millis(150));
+                status.ladder_cooldown = 3;
             }
             println!("under checkpoint");
         }
