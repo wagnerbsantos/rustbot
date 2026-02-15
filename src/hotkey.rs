@@ -27,7 +27,7 @@ pub fn use_general_hotkeys(status: &Status) {
     let mut done = 0;
     // items
     if !status.item_cooldown && done == 0 && status.ladder_cooldown % 2 == 0 {
-        if status.mana <= 9 && done == 0 {
+        if status.mana <= 13 && done == 0 {
             if status.big_mana_available {
                 click(BIG_MANA_HOTKEY);
                 done = 1;
@@ -40,7 +40,7 @@ pub fn use_general_hotkeys(status: &Status) {
             }
             sleep(Duration::from_millis(50));
         }
-        if status.mana <= 9 && done == 0 {
+        if status.mana <= 15 && done == 0 {
             if status.medium_mana_available {
                 click(MEDIUM_MANA_HOTKEY);
                 done = 1;
